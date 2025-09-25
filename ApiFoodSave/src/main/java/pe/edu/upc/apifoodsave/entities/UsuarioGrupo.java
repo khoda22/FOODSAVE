@@ -11,14 +11,12 @@ public class UsuarioGrupo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUsuarioGrupo;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
+    @JoinColumn(name = "idUsuario")
     private Usuario usuario;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "idGrupo", nullable = false)
+    @JoinColumn(name = "idGrupo")
     private Grupo grupo;
 
     @Column(name = "fechaUnion", nullable = false)

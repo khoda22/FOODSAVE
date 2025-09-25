@@ -11,17 +11,17 @@ public class UsuarioLogro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUsuarioLogro;
 
-    @Id
+
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @Id
+
     @ManyToOne
-    @JoinColumn(name = "idLogro", nullable = false)
+    @JoinColumn(name = "idLogro")
     private Logro logro;
 
-    @Column(name = "fechaLogro", nullable = false)
+    @Column(name = "fechaLogro")
     private LocalDateTime fechaLogro;
 
     public UsuarioLogro() {
