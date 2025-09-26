@@ -61,7 +61,13 @@ public class RecetaController {
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable("id") int id) {
+    public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
+        Receta r = service.listId(id);
+        if (r == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe un registro con el ID: " + id);
+        }
         service.delete(id);
+        return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
 }

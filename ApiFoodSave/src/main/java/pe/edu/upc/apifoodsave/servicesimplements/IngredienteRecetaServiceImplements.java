@@ -24,6 +24,11 @@ public class IngredienteRecetaServiceImplements implements IIngredienteRecetaSer
     }
 
     @Override
+    public IngredienteReceta listId(int id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
     public void delete(int id) {
         repository.deleteById(id);
     }
