@@ -24,6 +24,11 @@ public class FavoritoRecetaServiceImplements implements IFavoritoRecetaService {
     }
 
     @Override
+    public FavoritoReceta listId(int id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
     public void delete(int id) {
         repository.deleteById(id);
     }

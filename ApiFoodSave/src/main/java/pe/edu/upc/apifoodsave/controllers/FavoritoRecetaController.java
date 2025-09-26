@@ -1,6 +1,8 @@
 package pe.edu.upc.apifoodsave.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.FavoritoRecetaDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.FavoritoRecetaDTOList;
@@ -48,7 +50,13 @@ public class FavoritoRecetaController {
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable("id") int id) {
+    public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
+        FavoritoReceta f = service.listId(id);
+        if (f == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe un registro con el ID: " + id);
+        }
         service.delete(id);
+        return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
 }
