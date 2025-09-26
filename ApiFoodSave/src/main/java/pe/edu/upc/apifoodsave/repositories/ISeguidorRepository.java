@@ -6,6 +6,6 @@ import pe.edu.upc.apifoodsave.entities.Seguidor;
 
 @Repository
 public interface ISeguidorRepository extends JpaRepository<Seguidor, Integer> {
-    boolean existsByUsuario_IdUsuarioAndSeguido_IdUsuario(int idUsuario, int idSeguido);
-    void deleteByUsuario_IdUsuarioAndSeguido_IdUsuario(int idUsuario, int idSeguido);
+    boolean existsBySeguidor_IdUsuarioAndSeguido_IdUsuario(int idSeguidor, int idSeguido);
+    void deleteBySeguidor_IdUsuarioAndSeguido_IdUsuario(int idSeguidor, int idSeguido);
 }

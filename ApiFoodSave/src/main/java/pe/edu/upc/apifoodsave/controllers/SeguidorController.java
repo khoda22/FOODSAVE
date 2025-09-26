@@ -57,7 +57,7 @@ public class SeguidorController {
                     .body("Un usuario no puede dejar de seguirse a sí mismo.");
         }
 
-        boolean existe = repo.existsByUsuario_IdUsuarioAndSeguido_IdUsuario(
+        boolean existe = repo.existsBySeguidor_IdUsuarioAndSeguido_IdUsuario(
                 dto.getIdSeguidor(), dto.getIdSeguido());
 
         if (!existe) {
@@ -65,7 +65,7 @@ public class SeguidorController {
                     .body("El usuario " + dto.getIdSeguidor() + " no sigue al usuario " + dto.getIdSeguido());
         }
 
-        repo.deleteByUsuario_IdUsuarioAndSeguido_IdUsuario(
+        repo.deleteBySeguidor_IdUsuarioAndSeguido_IdUsuario(
                 dto.getIdSeguidor(), dto.getIdSeguido());
 
         return ResponseEntity.ok("El usuario " + dto.getIdSeguidor()
