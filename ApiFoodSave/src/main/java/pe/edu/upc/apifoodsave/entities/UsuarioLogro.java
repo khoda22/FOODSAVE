@@ -5,24 +5,27 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "UsuariosLogros")
+@Table(name = "UsuarioLogro")
 public class UsuarioLogro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUsuarioLogro;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idLogro", nullable = false)
     private Logro logro;
 
     @Column(name = "fechaLogro", nullable = false)
     private LocalDateTime fechaLogro;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaLogro == null) this.fechaLogro = LocalDateTime.now();
+    }
 
     public UsuarioLogro() {
     }

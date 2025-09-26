@@ -5,18 +5,16 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "UsuariosGrupos")
+@Table(name = "UsuarioGrupo")
 public class UsuarioGrupo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUsuarioGrupo;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idGrupo", nullable = false)
     private Grupo grupo;
@@ -26,6 +24,11 @@ public class UsuarioGrupo {
 
     @Column(name = "rolGrupo", length = 30)
     private String rolGrupo;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaUnion == null) this.fechaUnion = LocalDateTime.now();
+    }
 
     public UsuarioGrupo() {
     }
