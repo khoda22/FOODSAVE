@@ -27,6 +27,11 @@ public class ComentarioPublicacion {
     @JoinColumn(name = "idPublicacion", nullable = false)
     private Publicacion publicacion;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaCreacionComentario == null) this.fechaCreacionComentario = LocalDateTime.now();
+    }
+
     public ComentarioPublicacion() {
     }
 

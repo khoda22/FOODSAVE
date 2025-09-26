@@ -40,6 +40,11 @@ public class Usuario {
     @JoinColumn(name = "idRol")
     private Rol rol;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.Creacion == null) this.Creacion = LocalDateTime.now();
+    }
+
     public Usuario() {}
 
     public Usuario(int idUsuario, Rol rol, String username, String email, String password, String foto, Boolean estado, LocalDateTime creacion, LocalDateTime login, String ubicacion) {

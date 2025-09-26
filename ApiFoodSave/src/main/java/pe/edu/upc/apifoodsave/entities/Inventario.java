@@ -35,6 +35,11 @@ public class Inventario {
     @JoinColumn(name = "idProducto")
     private Producto producto;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.fechacreacionInventario == null) this.fechacreacionInventario = LocalDate.now();
+    }
+
     public Inventario() {}
 
     public Inventario(int idInventario, int cantidadInventario, String estadoInventario, LocalDate fechavencimientoInventario, LocalDate fechacreacionInventario, Usuario usuario, Producto producto) {

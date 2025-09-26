@@ -31,6 +31,11 @@ public class Publicacion {
     private Receta receta;
     */
 
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaCreacionPublicacion == null) this.fechaCreacionPublicacion = LocalDateTime.now();
+    }
+
     public Publicacion() {
     }
 
