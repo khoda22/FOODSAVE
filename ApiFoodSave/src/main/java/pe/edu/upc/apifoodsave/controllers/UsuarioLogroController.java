@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.UsuarioLogroDTO;
 import pe.edu.upc.apifoodsave.entities.UsuarioLogro;
@@ -26,6 +27,7 @@ public class UsuarioLogroController {
     private ILogroRepository logroRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> asignar(@RequestBody UsuarioLogroDTO dto) {
         if (ulRepo.existsByUsuario_IdUsuarioAndLogro_IdLogro(dto.getIdUsuario(), dto.getIdLogro())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario ya tiene este logro.");
@@ -40,6 +42,7 @@ public class UsuarioLogroController {
     }
 
     @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> quitar(@PathVariable("id") int idUsuarioLogro) {
         if (!ulRepo.existsById(idUsuarioLogro)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

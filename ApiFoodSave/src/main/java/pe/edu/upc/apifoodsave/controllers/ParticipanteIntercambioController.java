@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.ParticipanteIntercambioDTOInsert;
 import pe.edu.upc.apifoodsave.entities.ParticipanteIntercambio;
@@ -24,6 +25,7 @@ public class ParticipanteIntercambioController {
     private IIntercambioRepository intercambioRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody ParticipanteIntercambioDTOInsert dto) {
         ParticipanteIntercambio p = new ParticipanteIntercambio();
         if (dto.getIdUsuario() != null) {
@@ -36,6 +38,7 @@ public class ParticipanteIntercambioController {
     }
 
     @DeleteMapping("/cancelar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> cancelar(@RequestBody ParticipanteIntercambioDTOInsert dto) {
         if (dto.getIdUsuario() == null || dto.getIdIntercambio() == null) {
             return ResponseEntity.badRequest().body("idUsuario e idIntercambio son obligatorios.");

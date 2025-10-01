@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.LikeDTO;
 import pe.edu.upc.apifoodsave.entities.MeGustaPublicacion;
@@ -22,8 +23,8 @@ public class MeGustaPubicacionController {
     @Autowired private IPublicacionRepository publicacionRepo;  // resolver FK
 
     // Crear like (USUARIO)
-    //@PreAuthorize("hasAuthority('USUARIO')")
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAuthority('USUARIO')")
     public ResponseEntity<String> insertar(@RequestBody LikeDTO dto) {
         if (dto.getIdUsuario() <= 0 || dto.getIdPublicacion() <= 0) {
             return ResponseEntity.badRequest().body("idUsuario e idPublicacion deben ser > 0");
@@ -45,8 +46,8 @@ public class MeGustaPubicacionController {
     }
 
     //Eliminar like por par (idUsuario, idPublicacion)
-    //@PreAuthorize("hasAuthority('USUARIO')")
     @DeleteMapping("/eliminar")
+    @PreAuthorize("hasAuthority('USUARIO')")
     public ResponseEntity<String> eliminarPorPar(@RequestBody LikeDTO dto) {
         if (!meGustaRepo.existsByUsuario_IdUsuarioAndPublicacion_IdPublicacion(dto.getIdUsuario(), dto.getIdPublicacion())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el like para ese usuario/publicación.");

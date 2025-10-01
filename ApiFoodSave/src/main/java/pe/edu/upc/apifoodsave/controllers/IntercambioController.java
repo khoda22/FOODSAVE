@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.IntercambioDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.IntercambioDTOList;
@@ -21,6 +22,7 @@ public class IntercambioController {
     private IIntercambioService service;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody IntercambioDTOInsert dto) {
         ModelMapper m = new ModelMapper();
         Intercambio i = m.map(dto, Intercambio.class);
@@ -28,6 +30,7 @@ public class IntercambioController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<IntercambioDTOList> listar() {
         return service.list().stream().map(i -> {
             IntercambioDTOList dto = new IntercambioDTOList();
@@ -40,6 +43,7 @@ public class IntercambioController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Intercambio i = service.listId(id);
         if (i == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe intercambio " + id);
@@ -49,6 +53,7 @@ public class IntercambioController {
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody IntercambioDTOUpdate dto) {
         ModelMapper m = new ModelMapper();
         Intercambio i = m.map(dto, Intercambio.class);
@@ -61,6 +66,7 @@ public class IntercambioController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
         Intercambio i = service.listId(id);
         if (i == null) {

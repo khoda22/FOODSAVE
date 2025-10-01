@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.PublicacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.PublicacionListDTO;
@@ -24,6 +25,7 @@ public class PublicacionController {
     private IUsuarioRepository usuarioRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody PublicacionInsertDTO dto) {
         ModelMapper m = new ModelMapper();
         Publicacion p = m.map(dto, Publicacion.class);
@@ -36,6 +38,7 @@ public class PublicacionController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<PublicacionListDTO> listar() {
         return service.list().stream().map(p -> {
             PublicacionListDTO dto = new PublicacionListDTO();
@@ -52,6 +55,7 @@ public class PublicacionController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Publicacion p = service.listId(id);
         if (p == null) {
@@ -66,6 +70,7 @@ public class PublicacionController {
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody PublicacionUpdateDTO dto) {
         ModelMapper m = new ModelMapper();
         Publicacion p = m.map(dto, Publicacion.class);

@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.FavoritoRecetaDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.FavoritoRecetaDTOList;
@@ -25,6 +26,7 @@ public class FavoritoRecetaController {
     private IRecetaRepository recetaRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody FavoritoRecetaDTOInsert dto) {
         FavoritoReceta f = new FavoritoReceta();
         if (dto.getIdUsuario() != null) {
@@ -37,6 +39,7 @@ public class FavoritoRecetaController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<FavoritoRecetaDTOList> listar() {
         return service.list().stream().map(f -> {
             FavoritoRecetaDTOList dto = new FavoritoRecetaDTOList();
@@ -50,6 +53,7 @@ public class FavoritoRecetaController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
         FavoritoReceta f = service.listId(id);
         if (f == null) {
