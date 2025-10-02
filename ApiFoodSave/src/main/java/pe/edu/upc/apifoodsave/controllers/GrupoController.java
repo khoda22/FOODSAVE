@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.GrupoDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.GrupoDTOList;
@@ -21,6 +22,7 @@ public class GrupoController {
     private IGrupoService service;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody GrupoDTOInsert dto) {
         ModelMapper m = new ModelMapper();
         Grupo g = m.map(dto, Grupo.class);
@@ -28,6 +30,7 @@ public class GrupoController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<GrupoDTOList> listar() {
         return service.list().stream().map(g -> {
             ModelMapper m = new ModelMapper();
@@ -36,6 +39,7 @@ public class GrupoController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Grupo g = service.listId(id);
         if (g == null) {
@@ -48,6 +52,7 @@ public class GrupoController {
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody GrupoDTOUpdate dto) {
         ModelMapper m = new ModelMapper();
         Grupo g = m.map(dto, Grupo.class);
@@ -63,6 +68,7 @@ public class GrupoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         Grupo existente = service.listId(id);
         if (existente == null) {

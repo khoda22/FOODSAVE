@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.SeguidorDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.SeguidorDTOList;
@@ -25,6 +26,7 @@ public class SeguidorController {
     private IUsuarioRepository usuarioRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody SeguidorDTOInsert dto) {
         Seguidor s = new Seguidor();
         s.setFechaUnion(dto.getFechaUnion());
@@ -38,6 +40,7 @@ public class SeguidorController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<SeguidorDTOList> listar() {
         return service.list().stream().map(s -> {
             SeguidorDTOList dto = new SeguidorDTOList();
@@ -50,6 +53,7 @@ public class SeguidorController {
     }
 
     @DeleteMapping("/dejar-de-seguir")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> dejarDeSeguir(@RequestBody SeguidorDTOInsert dto) {
         // opcional: evitar self-follow
         if (dto.getIdSeguidor() == dto.getIdSeguido()) {

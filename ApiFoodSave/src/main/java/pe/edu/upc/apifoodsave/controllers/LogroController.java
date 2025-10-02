@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.LogroInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.LogroListDTO;
@@ -21,6 +22,7 @@ public class LogroController {
     private ILogroService service;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody LogroInsertDTO dto) {
         ModelMapper m = new ModelMapper();
         Logro l = m.map(dto, Logro.class);
@@ -28,6 +30,7 @@ public class LogroController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<LogroListDTO> listar() {
         return service.list().stream().map(l -> {
             ModelMapper m = new ModelMapper();
@@ -36,6 +39,7 @@ public class LogroController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Logro l = service.listId(id);
         if (l == null) {
@@ -48,6 +52,7 @@ public class LogroController {
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody LogroUpdateDTO dto) {
         ModelMapper m = new ModelMapper();
         Logro l = m.map(dto, Logro.class);
@@ -63,6 +68,7 @@ public class LogroController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         Logro existente = service.listId(id);
         if (existente == null) {

@@ -1,6 +1,7 @@
 package pe.edu.upc.apifoodsave.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.CalificacionRecetaDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.CalificacionRecetaDTOList;
@@ -20,6 +21,7 @@ public class CalificacionRecetaController {
     private IRecetaRepository recetaRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody CalificacionRecetaDTOInsert dto) {
         CalificacionReceta c = new CalificacionReceta();
         c.setCalificacion(dto.getCalificacion());
@@ -30,6 +32,7 @@ public class CalificacionRecetaController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<CalificacionRecetaDTOList> listar() {
         return service.list().stream().map(c -> {
             CalificacionRecetaDTOList dto = new CalificacionRecetaDTOList();

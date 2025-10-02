@@ -2,6 +2,7 @@ package pe.edu.upc.apifoodsave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.NotificacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.NotificacionListDTO;
@@ -21,6 +22,7 @@ public class NotificacionController {
     private IInventarioRepository inventarioRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody NotificacionInsertDTO dto) {
         ModelMapper m = new ModelMapper();
         Notificacion n = m.map(dto, Notificacion.class);
@@ -31,6 +33,7 @@ public class NotificacionController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<NotificacionListDTO> listar() {
         return service.list().stream().map(n -> {
             NotificacionListDTO dto = new NotificacionListDTO();

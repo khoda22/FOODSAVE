@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.ReporteContenidoDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.ReporteContenidoDTOList;
@@ -26,6 +27,7 @@ public class ReporteContenidoController {
     private IPublicacionRepository publicacionRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody ReporteContenidoDTOInsert dto) {
         ReporteContenido r = new ReporteContenido();
         r.setMotivo(dto.getMotivo());
@@ -41,6 +43,7 @@ public class ReporteContenidoController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<ReporteContenidoDTOList> listar() {
         return service.list().stream().map(r -> {
             ReporteContenidoDTOList dto = new ReporteContenidoDTOList();
@@ -53,6 +56,7 @@ public class ReporteContenidoController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         ReporteContenido r = service.listId(id);
         if (r == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe reporte " + id);
@@ -65,6 +69,7 @@ public class ReporteContenidoController {
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody ReporteContenidoDTOUpdate dto) {
         ReporteContenido existente = service.listId(dto.getIdReporte());
         if (existente == null) {
