@@ -10,4 +10,5 @@ public interface IClasificacionSemanalService {
     public List<ClasificacionSemanal> list();
     public ClasificacionSemanal listId (int id);
     public void delete (int id);
+    public List<String[]> RankClasificacionSemanalService();
 }

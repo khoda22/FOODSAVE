@@ -37,4 +37,9 @@ public class ClasificacionSemanalServiceImplements implements IClasificacionSema
     public void delete(int id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<String[]> RankClasificacionSemanalService() {
+        return repository.RankClasificacionSemanal();
+    }
 }

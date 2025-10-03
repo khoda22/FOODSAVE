@@ -37,4 +37,9 @@ public class LogroServiceImplements implements ILogroService {
     public void delete(int id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<String[]> InsigniasService() {
+        return repository.Insignias();
+    }
 }

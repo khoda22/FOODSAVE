@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.ClasificacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.ClasificacionListDTO;
+import pe.edu.upc.apifoodsave.dtos.ClasificacionSemanalRankDTO;
 import pe.edu.upc.apifoodsave.dtos.ClasificacionUpdateDTO;
 import pe.edu.upc.apifoodsave.entities.ClasificacionSemanal;
 import pe.edu.upc.apifoodsave.repositories.IUsuarioRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IClasificacionSemanalService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -100,5 +102,33 @@ public class ClasificacionSemanalController {
         }
         service.delete(id);
         return ResponseEntity.ok("Clasificación con ID " + id + " eliminada correctamente.");
+    }
+
+    @GetMapping("/rankSemanal")
+    public ResponseEntity<?> rankSemanal() {
+        List<String[]> rank=service.RankClasificacionSemanalService();
+        List<ClasificacionSemanalRankDTO> listaRank=new ArrayList<>();
+
+        if (rank.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontraron proveedores registrados ");
+        }
+        for(String[] columna:rank){
+            ClasificacionSemanalRankDTO dto=new ClasificacionSemanalRankDTO();
+            // columna[0] = amount
+            int idUsuario = Integer.parseInt(columna[0]);
+            String nombre = columna[1];
+            int puntosLogro = Integer.parseInt(columna[2]);
+            double kgSalvadosClasificacion = Double.parseDouble(columna[3]);
+
+            dto.setIdUsuario(idUsuario);
+            dto.setNombre(nombre);
+            dto.setPuntosLogro(puntosLogro);
+            dto.setKgSalvadosClasificacion(kgSalvadosClasificacion);
+
+            listaRank.add(dto);
+        }
+        return ResponseEntity.ok(listaRank);
+
     }
 }
