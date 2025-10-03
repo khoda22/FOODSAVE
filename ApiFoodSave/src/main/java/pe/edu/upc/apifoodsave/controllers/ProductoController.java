@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.ProductoDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.ProductoDTOList;
@@ -21,6 +22,7 @@ public class ProductoController {
     private IProductoService service;
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<ProductoDTOList> listar(){
         return service.list().stream().map(a->{
             ModelMapper m=new ModelMapper();
@@ -28,12 +30,14 @@ public class ProductoController {
         }).collect(Collectors.toList());
     }
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody ProductoDTOInsert dto) {
         ModelMapper m=new ModelMapper();
         Producto prov=m.map(dto,Producto.class);
         service.insert(prov);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Producto prov = service.listId(id);
         if (prov == null) {
@@ -47,6 +51,7 @@ public class ProductoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         Producto p = service.listId(id);
         if (p == null) {
@@ -57,6 +62,7 @@ public class ProductoController {
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
     @PutMapping("/edit")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> modificar(@RequestBody ProductoDTOUpdate dto) {
         ModelMapper m = new ModelMapper();
         Producto p = m.map(dto, Producto.class);

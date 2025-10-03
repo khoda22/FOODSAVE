@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class UsuarioController {
     @Autowired
     private IUsuarioService uS;
-
+  
     @GetMapping("/lista")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<UsuarioDTO> Listar() {
@@ -58,23 +58,25 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
     public UsuarioDTO Listarporid(@PathVariable("id") int id){
         ModelMapper m = new ModelMapper();
         UsuarioDTO dto = m.map(uS.listarporid(id),UsuarioDTO.class);
         return dto;
     }
 
+
     @PutMapping("/actualizar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
     public void Modificar(@RequestBody UsuarioDTO dto){
         ModelMapper m = new ModelMapper();
         Usuario u = m.map(dto,Usuario.class);
         uS.Modificar(u);
     }
 
+
     @DeleteMapping( "/borrar/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
     public void Eliminar(@PathVariable("id") int id){
         uS.Eliminar(id);
     }

@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.IngredienteRecetaDTOInsert;
 import pe.edu.upc.apifoodsave.dtos.IngredienteRecetaDTOList;
@@ -25,6 +26,7 @@ public class IngredienteRecetaController {
     private IProductoRepository productoRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public void insertar(@RequestBody IngredienteRecetaDTOInsert dto) {
         IngredienteReceta ir = new IngredienteReceta();
         ir.setCantidadProductos(dto.getCantidadProductos());
@@ -40,6 +42,7 @@ public class IngredienteRecetaController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<IngredienteRecetaDTOList> listar() {
         return service.list().stream().map(ir -> {
             IngredienteRecetaDTOList dto = new IngredienteRecetaDTOList();
@@ -56,6 +59,7 @@ public class IngredienteRecetaController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
         IngredienteReceta ir = service.listId(id);
         if (ir == null) {

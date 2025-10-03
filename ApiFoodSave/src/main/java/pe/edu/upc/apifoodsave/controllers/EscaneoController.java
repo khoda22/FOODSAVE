@@ -2,6 +2,7 @@ package pe.edu.upc.apifoodsave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.EscaneoInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.EscaneoListDTO;
@@ -24,6 +25,7 @@ public class EscaneoController {
     private IProductoRepository productoRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody EscaneoInsertDTO dto) {
         ModelMapper m = new ModelMapper();
         Escaneo e = m.map(dto, Escaneo.class);
@@ -37,6 +39,7 @@ public class EscaneoController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<EscaneoListDTO> listar() {
         return service.list().stream().map(e -> {
             EscaneoListDTO dto = new EscaneoListDTO();

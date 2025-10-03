@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.ClasificacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.ClasificacionListDTO;
@@ -27,6 +28,7 @@ public class ClasificacionSemanalController {
     private IUsuarioRepository usuarioRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> insertar(@RequestBody ClasificacionInsertDTO dto) {
         ModelMapper m = new ModelMapper();
         ClasificacionSemanal c = m.map(dto, ClasificacionSemanal.class);
@@ -40,6 +42,7 @@ public class ClasificacionSemanalController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<ClasificacionListDTO> listar() {
         return service.list().stream().map(c -> {
             ClasificacionListDTO dto = new ClasificacionListDTO();
@@ -55,6 +58,7 @@ public class ClasificacionSemanalController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         ClasificacionSemanal c = service.listId(id);
         if (c == null) {
@@ -72,6 +76,7 @@ public class ClasificacionSemanalController {
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody ClasificacionUpdateDTO dto) {
         ModelMapper m = new ModelMapper();
         ClasificacionSemanal c = m.map(dto, ClasificacionSemanal.class);
@@ -94,6 +99,7 @@ public class ClasificacionSemanalController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         ClasificacionSemanal existente = service.listId(id);
         if (existente == null) {

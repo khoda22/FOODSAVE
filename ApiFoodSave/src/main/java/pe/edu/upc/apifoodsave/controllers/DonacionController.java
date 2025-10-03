@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.DonacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.DonacionListDTO;
@@ -24,6 +25,7 @@ public class DonacionController {
     private IInventarioRepository inventarioRepository;
 
     @PostMapping("/nuevos")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody DonacionInsertDTO dto) {
         ModelMapper m = new ModelMapper();
         Donacion d = m.map(dto, Donacion.class);
@@ -34,6 +36,7 @@ public class DonacionController {
     }
 
     @GetMapping("/listas")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<DonacionListDTO> listar() {
         return service.list().stream().map(d -> {
             DonacionListDTO dto = new DonacionListDTO();
@@ -45,6 +48,7 @@ public class DonacionController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Donacion d = service.listId(id);
         if (d == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe donación " + id);
@@ -56,6 +60,7 @@ public class DonacionController {
     }
 
     @PutMapping("/editar")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody DonacionUpdateDTO dto) {
         ModelMapper m = new ModelMapper();
         Donacion d = m.map(dto, Donacion.class);
@@ -70,6 +75,7 @@ public class DonacionController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
         Donacion d = service.listId(id);
         if (d == null) {
