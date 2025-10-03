@@ -19,6 +19,7 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
             "  u.ubicacion,\n" +
             "  u.login,\n" +
             "  u.Creacion,\n" +
+            "  u.id_rol,\n" +
             "FROM usuario u;", nativeQuery = true)
     public List<String[]> ListarUsernameSinPassword();
 
