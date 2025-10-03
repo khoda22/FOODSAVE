@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.LogroInsertDTO;
+import pe.edu.upc.apifoodsave.dtos.LogroInsigniaDTO;
 import pe.edu.upc.apifoodsave.dtos.LogroListDTO;
 import pe.edu.upc.apifoodsave.dtos.LogroUpdateDTO;
 import pe.edu.upc.apifoodsave.entities.Logro;
 import pe.edu.upc.apifoodsave.servicesinterfaces.ILogroService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,5 +79,35 @@ public class LogroController {
         }
         service.delete(id);
         return ResponseEntity.ok("Logro con ID " + id + " eliminado correctamente.");
+    }
+
+    @GetMapping("/Insignia")
+    public ResponseEntity<?>  listarInsignia() {
+        List<String[]> insignias=service.InsigniasService();
+        List<LogroInsigniaDTO> listarInsignias=new ArrayList<>();
+        if (insignias.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontraron Insignias");
+        }
+        for(String[] columna:insignias){
+            LogroInsigniaDTO dto=new LogroInsigniaDTO();
+
+            int idUsuario = Integer.parseInt(columna[0]);
+            String nombre = columna[1];
+            double kgSalvadosClasificacion = Double.parseDouble(columna[2]);
+            int nombreLogro = Integer.parseInt(columna[3]);
+            String descripcionLogro = columna[4];
+            int puntosLogro = Integer.parseInt(columna[5]);
+
+            dto.setIdUsuario(idUsuario);
+            dto.setNombre(nombre);
+            dto.setKgSalvadosClasificacion(kgSalvadosClasificacion);
+            dto.setNombreLogro(nombreLogro);
+            dto.setDescripcionLogro(descripcionLogro);
+            dto.setPuntosLogro(puntosLogro);
+
+            listarInsignias.add(dto);
+        }
+        return ResponseEntity.ok(listarInsignias);
     }
 }

@@ -10,4 +10,5 @@ public interface ILogroService {
     public Logro listId(int id);
     public void edit (Logro l);
     public void delete (int id);
+    public List<String[]> InsigniasService();
 }
