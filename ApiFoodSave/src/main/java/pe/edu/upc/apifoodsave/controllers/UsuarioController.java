@@ -3,7 +3,6 @@ package pe.edu.upc.apifoodsave.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.UsernameSinPasswordDTO;
 import pe.edu.upc.apifoodsave.dtos.UsuarioDTO;
@@ -17,13 +16,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuario")
-@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 public class UsuarioController {
     @Autowired
     private IUsuarioService uS;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @GetMapping
+  
+    @GetMapping("/lista")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UsuarioDTO> Listar() {
         return uS.listar().stream().map( x->{
             ModelMapper m = new ModelMapper();
@@ -32,7 +30,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/listarsinpassword")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UsernameSinPasswordDTO> ListarUsernameSinPassword()
     {
         List<String[]> lista = uS.ListarUsernameSinPassword();
@@ -50,8 +48,8 @@ public class UsuarioController {
         return ListDTO;
     }
 
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    @PostMapping("/registrar")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void Registrar(@RequestBody UsuarioDTO dto){
         ModelMapper m = new ModelMapper();
         Usuario u = m.map(dto,Usuario.class);
@@ -60,24 +58,25 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
     public UsuarioDTO Listarporid(@PathVariable("id") int id){
         ModelMapper m = new ModelMapper();
         UsuarioDTO dto = m.map(uS.listarporid(id),UsuarioDTO.class);
         return dto;
     }
 
-    @PutMapping
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+
+    @PutMapping("/actualizar")
+    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
     public void Modificar(@RequestBody UsuarioDTO dto){
         ModelMapper m = new ModelMapper();
         Usuario u = m.map(dto,Usuario.class);
         uS.Modificar(u);
     }
 
-    @DeleteMapping( "/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
 
+    @DeleteMapping( "/borrar/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
     public void Eliminar(@PathVariable("id") int id){
         uS.Eliminar(id);
     }
