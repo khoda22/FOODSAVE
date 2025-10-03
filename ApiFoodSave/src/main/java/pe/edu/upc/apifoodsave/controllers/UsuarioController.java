@@ -21,7 +21,7 @@ public class UsuarioController {
     private IUsuarioService uS;
   
     @GetMapping("/lista")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public List<UsuarioDTO> Listar() {
         return uS.listar().stream().map( x->{
             ModelMapper m = new ModelMapper();
@@ -30,7 +30,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/listarsinpassword")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public List<UsernameSinPasswordDTO> ListarUsernameSinPassword()
     {
         List<String[]> lista = uS.ListarUsernameSinPassword();
@@ -49,7 +49,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/registrar")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public void Registrar(@RequestBody UsuarioDTO dto){
         ModelMapper m = new ModelMapper();
         Usuario u = m.map(dto,Usuario.class);
@@ -57,8 +57,8 @@ public class UsuarioController {
 
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
+    @GetMapping("/buscar/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public UsuarioDTO Listarporid(@PathVariable("id") int id){
         ModelMapper m = new ModelMapper();
         UsuarioDTO dto = m.map(uS.listarporid(id),UsuarioDTO.class);
@@ -67,7 +67,7 @@ public class UsuarioController {
 
 
     @PutMapping("/actualizar")
-    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public void Modificar(@RequestBody UsuarioDTO dto){
         ModelMapper m = new ModelMapper();
         Usuario u = m.map(dto,Usuario.class);
@@ -76,7 +76,7 @@ public class UsuarioController {
 
 
     @DeleteMapping( "/borrar/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','PROGRAMADOR')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public void Eliminar(@PathVariable("id") int id){
         uS.Eliminar(id);
     }
