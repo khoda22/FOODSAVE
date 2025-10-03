@@ -9,7 +9,6 @@ import pe.edu.upc.apifoodsave.dtos.UsernameSinPasswordDTO;
 import pe.edu.upc.apifoodsave.dtos.UsuarioDTO;
 import pe.edu.upc.apifoodsave.entities.Usuario;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IUsuarioService;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +16,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuario")
-@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 public class UsuarioController {
     @Autowired
     private IUsuarioService uS;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public List<UsuarioDTO> Listar() {
         return uS.listar().stream().map( x->{
             ModelMapper m = new ModelMapper();
@@ -55,6 +54,8 @@ public class UsuarioController {
     public void Registrar(@RequestBody UsuarioDTO dto){
         ModelMapper m = new ModelMapper();
         Usuario u = m.map(dto,Usuario.class);
+        String encodedPassword = passwordEncoder.encode(u.getPassword());
+        u.setPassword(encodedPassword);
         uS.Registrar(u);
 
     }
