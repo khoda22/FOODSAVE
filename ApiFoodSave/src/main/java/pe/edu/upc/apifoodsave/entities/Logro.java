@@ -9,13 +9,13 @@ public class Logro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idLogro;
 
-    @Column(name = "nombreLogro", length = 100, nullable = false)
+    @Column(name = "nombreLogro", length = 100)
     private String nombreLogro;
 
     @Column(name = "descripcionLogro", length = 2000)
     private String descripcionLogro;
 
-    @Column(name = "puntosLogro", nullable = false)
+    @Column(name = "puntosLogro")
     private int puntosLogro;
 
     public Logro() {
