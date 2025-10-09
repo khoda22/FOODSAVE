@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.NotificacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.NotificacionListDTO;
+import pe.edu.upc.apifoodsave.dtos.NotificacionPorGrupoDTO;
 import pe.edu.upc.apifoodsave.entities.Notificacion;
 import pe.edu.upc.apifoodsave.repositories.IInventarioRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.INotificacionService;
@@ -43,5 +44,10 @@ public class NotificacionController {
             dto.setFechaProgramada(n.getFechaProgramada());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/comparacion-por-grupo")
+    public List<NotificacionPorGrupoDTO> getComparacionPorGrupo() {
+        return service.comparacionNotificacionesPorGrupo();
     }
 }
