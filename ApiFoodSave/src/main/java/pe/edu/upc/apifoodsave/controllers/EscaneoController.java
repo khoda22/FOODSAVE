@@ -53,4 +53,6 @@ public class EscaneoController {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    //listar ulitmos 7 dias
 }
