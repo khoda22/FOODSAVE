@@ -7,4 +7,5 @@ import java.util.List;
 public interface IEscaneoService {
     public void insert(Escaneo e);
     public List<Escaneo> list();
+    List<Escaneo> obtenerHistorialUltimos7DiasService();
 }

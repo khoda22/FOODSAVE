@@ -38,4 +38,19 @@ public class ProductoServiceImplements implements IProductoService {
         repository.save(p);
     }
 
+    @Override
+    public List<Producto> buscarPorNombre(String nombre) {
+        return repository.buscarPorNombre(nombre);
+    }
+
+    @Override
+    public List<Producto> buscarPorCodigoBarra(Integer codigo) {
+        return repository.buscarPorCodigoBarra(codigo);
+    }
+
+    @Override
+    public List<Producto> sugerirProductosSimilares(String termino) {
+        return repository.buscarSimilares(termino);
+    }
+
 }
