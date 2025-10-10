@@ -2,21 +2,26 @@ package pe.edu.upc.apifoodsave.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.EscaneoInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.EscaneoListDTO;
 import pe.edu.upc.apifoodsave.entities.Escaneo;
+import pe.edu.upc.apifoodsave.repositories.IEscaneoRepository;
 import pe.edu.upc.apifoodsave.repositories.IProductoRepository;
 import pe.edu.upc.apifoodsave.repositories.IUsuarioRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IEscaneoService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/escaneos")
 public class EscaneoController {
+    @Autowired
+    private IEscaneoRepository escaneoRepository;
     @Autowired
     private IEscaneoService service;
     @Autowired
@@ -54,5 +59,15 @@ public class EscaneoController {
         }).collect(Collectors.toList());
     }
 
-    //listar ulitmos 7 dias
+    @GetMapping("/ultimos")
+    public ResponseEntity<?> obtenerEscaneosUltimosDias(@RequestParam(defaultValue = "7") int dias) {
+        LocalDate fechaInicio = LocalDate.now().minusDays(dias);
+        List<Escaneo> lista = escaneoRepository.findEscaneosUltimosDias(fechaInicio);
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.ok("No se encontraron escaneos en los últimos " + dias + " días.");
+        }
+
+        return ResponseEntity.ok(lista);
+    }
 }
