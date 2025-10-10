@@ -42,14 +42,23 @@ public class Inventario {
 
     public Inventario() {}
 
-    public Inventario(int idInventario, int cantidadInventario, String estadoInventario, LocalDate fechavencimientoInventario, LocalDate fechacreacionInventario, Usuario usuario, Producto producto) {
+    public Inventario(int idInventario, int cantidadInventario, int diasduracionInventario, String estadoInventario, LocalDate fechavencimientoInventario, LocalDate fechacreacionInventario, Usuario usuario, Producto producto) {
         this.idInventario = idInventario;
         this.cantidadInventario = cantidadInventario;
+        this.diasduracionInventario = diasduracionInventario;
         this.estadoInventario = estadoInventario;
         this.fechavencimientoInventario = fechavencimientoInventario;
         this.fechacreacionInventario = fechacreacionInventario;
         this.usuario = usuario;
         this.producto = producto;
+    }
+
+    public int getDiasduracionInventario() {
+        return diasduracionInventario;
+    }
+
+    public void setDiasduracionInventario(int diasduracionInventario) {
+        this.diasduracionInventario = diasduracionInventario;
     }
 
     public int getIdInventario() {
