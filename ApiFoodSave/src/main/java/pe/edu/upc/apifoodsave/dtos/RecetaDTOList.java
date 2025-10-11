@@ -1,18 +1,11 @@
 package pe.edu.upc.apifoodsave.dtos;
 
 public class RecetaDTOList {
-    private Integer idReceta;
+    //private Integer idReceta;
     private String titulo;
     private Integer dificultad;
-    private Integer tiempoPreparacion;
+    //private Integer tiempoPreparacion;
 
-    public Integer getIdReceta() {
-        return idReceta;
-    }
-
-    public void setIdReceta(Integer idReceta) {
-        this.idReceta = idReceta;
-    }
 
     public String getTitulo() {
         return titulo;
@@ -28,13 +21,5 @@ public class RecetaDTOList {
 
     public void setDificultad(Integer dificultad) {
         this.dificultad = dificultad;
-    }
-
-    public Integer getTiempoPreparacion() {
-        return tiempoPreparacion;
-    }
-
-    public void setTiempoPreparacion(Integer tiempoPreparacion) {
-        this.tiempoPreparacion = tiempoPreparacion;
     }
 }

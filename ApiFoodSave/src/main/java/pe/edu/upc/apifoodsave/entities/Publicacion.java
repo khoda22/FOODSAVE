@@ -26,10 +26,10 @@ public class Publicacion {
     private Usuario usuario;
 
     /* FK: Receta */
-   /* @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "idReceta", nullable = false)
     private Receta receta;
-    */
+
 
     @PrePersist
     public void prePersist() {
