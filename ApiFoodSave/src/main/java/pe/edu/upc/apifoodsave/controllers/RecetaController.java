@@ -34,10 +34,10 @@ public class RecetaController {
     public List<RecetaDTOList> listar() {
         return service.list().stream().map(r -> {
             RecetaDTOList dto = new RecetaDTOList();
-            //dto.setIdReceta(r.getIdReceta());
+            dto.setIdReceta(r.getIdReceta());
             dto.setTitulo(r.getTitulo());
             dto.setDificultad(r.getDificultad());
-            //dto.setTiempoPreparacion(r.getTiempoPreparacion());
+            dto.setTiempoPreparacion(r.getTiempoPreparacion());
             return dto;
         }).collect(Collectors.toList());
     }
