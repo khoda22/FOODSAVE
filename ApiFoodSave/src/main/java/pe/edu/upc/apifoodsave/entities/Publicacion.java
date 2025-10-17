@@ -45,7 +45,7 @@ public class Publicacion {
         this.fotoUrlPublicacion = fotoUrlPublicacion;
         this.fechaCreacionPublicacion = fechaCreacionPublicacion;
         this.usuario = usuario;
-        /*this.receta = receta;*/
+        this.receta = receta;
     }
 
     public int getIdPublicacion() {
@@ -88,11 +88,11 @@ public class Publicacion {
         this.usuario = usuario;
     }
 
-    /*public Receta getReceta() {
+    public Receta getReceta() {
         return receta;
     }
 
     public void setReceta(Receta receta) {
         this.receta = receta;
-    }*/
+    }
 }
