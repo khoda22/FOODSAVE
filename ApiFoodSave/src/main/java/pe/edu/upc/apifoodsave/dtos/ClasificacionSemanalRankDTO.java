@@ -1,40 +1,58 @@
 package pe.edu.upc.apifoodsave.dtos;
 
 public class ClasificacionSemanalRankDTO {
-    private int idUsuario;
-    private String nombre;
-    private int puntosLogro; //debe ser 0
-    private double kgSalvadosClasificacion;
+    private Integer posicion;
+    private Integer idUsuario;
+    private String username;
+    private Double kgTotales;
+    private Integer puntosTotales;
+    private String periodo; // para el endpoint "actual"
 
-    public int getIdUsuario() {
+    public Integer getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(Integer posicion) {
+        this.posicion = posicion;
+    }
+
+    public Integer getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public int getPuntosLogro() {
-        return puntosLogro;
+    public Double getKgTotales() {
+        return kgTotales;
     }
 
-    public void setPuntosLogro(int puntosLogro) {
-        this.puntosLogro = puntosLogro;
+    public void setKgTotales(Double kgTotales) {
+        this.kgTotales = kgTotales;
     }
 
-    public double getKgSalvadosClasificacion() {
-        return kgSalvadosClasificacion;
+    public Integer getPuntosTotales() {
+        return puntosTotales;
     }
 
-    public void setKgSalvadosClasificacion(double kgSalvadosClasificacion) {
-        this.kgSalvadosClasificacion = kgSalvadosClasificacion;
+    public void setPuntosTotales(Integer puntosTotales) {
+        this.puntosTotales = puntosTotales;
+    }
+
+    public String getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
     }
 }

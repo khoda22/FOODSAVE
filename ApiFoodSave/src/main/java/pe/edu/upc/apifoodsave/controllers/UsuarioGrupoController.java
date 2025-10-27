@@ -35,6 +35,7 @@ public class UsuarioGrupoController {
         UsuarioGrupo ug = new UsuarioGrupo();
         ug.setUsuario(usuarioRepository.getReferenceById(dto.getIdUsuario()));
         ug.setGrupo(grupoRepository.getReferenceById(dto.getIdGrupo()));
+        ug.setRolGrupo("PARTICIPANTE");
         ug.setFechaUnion(LocalDateTime.now());
 
         service.insert(ug);

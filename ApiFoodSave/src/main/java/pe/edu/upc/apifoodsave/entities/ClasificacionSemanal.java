@@ -23,6 +23,13 @@ public class ClasificacionSemanal {
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
+    // ⚙️ Regla automática: 10 puntos por kilo salvado (con redondeo floor)
+    @PrePersist
+    @PreUpdate
+    private void aplicarReglaPuntos() {
+        this.puntajeClasificacion = (int) Math.floor(this.kgSalvadosClasificacion * 10);
+    }
+
     public ClasificacionSemanal() {
     }
 

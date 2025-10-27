@@ -1,14 +1,14 @@
 package pe.edu.upc.apifoodsave.dtos;
 
 public class RolDTO {
-    private int idRol;
+    private Integer idRol;
     private String nombreRol;
 
-    public int getIdRol() {
+    public Integer getIdRol() {
         return idRol;
     }
 
-    public void setIdRol(int idRol) {
+    public void setIdRol(Integer idRol) {
         this.idRol = idRol;
     }
 

@@ -13,6 +13,7 @@ import pe.edu.upc.apifoodsave.dtos.InventarioDTOList;
 //import pe.edu.upc.apifoodsave.dtos.ProductoDTO;
 import pe.edu.upc.apifoodsave.entities.Inventario;
 import pe.edu.upc.apifoodsave.entities.Producto;
+import pe.edu.upc.apifoodsave.entities.Usuario;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IInventarioService;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IProductoService;
 
@@ -33,12 +34,31 @@ public class InventarioControllers {
             return m.map(a,InventarioDTOList.class);
         }).collect(Collectors.toList());
     }
+
     @PostMapping("/nuevos")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
-    public void insertar(@RequestBody InventarioDTOInsert dto) {
-        ModelMapper m=new ModelMapper();
-        Inventario inv=m.map(dto,Inventario.class);
+    public ResponseEntity<?> insertar(@RequestBody InventarioDTOInsert dto) {
+
+        Inventario inv = new Inventario();
+        inv.setCantidadInventario(dto.getCantidadInventario());
+        inv.setDiasduracionInventario(dto.getDiasduracionInventario());
+
+        // Ignorar campos derivados si vinieran en el DTO (defender la regla de negocio)
+        inv.setFechavencimientoInventario(null);
+        inv.setEstadoInventario(null);
+        inv.setFechacreacionInventario(null); // se fijará en @PrePersist si viene null
+
+        // Mapear relaciones por id (ModelMapper no setea nested por id automáticamente)
+        Usuario u = new Usuario();
+        u.setIdUsuario(dto.getIdUsuario());
+        inv.setUsuario(u);
+
+        Producto p = new Producto();
+        p.setIdProducto(dto.getIdProducto());
+        inv.setProducto(p);
+
         service.insert(inv);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
@@ -65,17 +85,39 @@ public class InventarioControllers {
         service.delete(id);
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
+
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> modificar(@RequestBody InventarioDTOUpdate dto) {
-        ModelMapper m = new ModelMapper();
-        Inventario p = m.map(dto, Inventario.class);
-        Inventario existente = service.listId(p.getIdInventario());
+
+        Inventario existente = service.listId(dto.getIdInventario());
         if (existente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se puede modificar. No existe un registro con el ID: " + p.getIdInventario());
+                    .body("No se puede modificar. No existe un registro con el ID: " + dto.getIdInventario());
         }
-        service.edit(p);
-        return ResponseEntity.ok("Registro con ID " + p.getIdInventario() + " modificado correctamente.");
+
+        // Actualizar campos editables
+        existente.setCantidadInventario(dto.getCantidadInventario());
+        existente.setDiasduracionInventario(dto.getDiasduracionInventario());
+
+        // Si se cambian relaciones:
+        if (dto.getIdProducto() != 0) {
+            Producto p = new Producto();
+            p.setIdProducto(dto.getIdProducto());
+            existente.setProducto(p);
+        }
+
+        if (dto.getIdUsuario() != 0) {
+            Usuario u = new Usuario();
+            u.setIdUsuario(dto.getIdUsuario());
+            existente.setUsuario(u);
+        }
+
+        // Recalcular vencimiento y estado
+        existente.recomputarFechasYEstado();
+
+        // Guardar cambios
+        service.edit(existente);
+        return ResponseEntity.ok("Inventario con ID " + dto.getIdInventario() + " modificado y recalculado correctamente.");
     }
 }

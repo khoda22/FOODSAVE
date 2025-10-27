@@ -11,10 +11,12 @@ import pe.edu.upc.apifoodsave.dtos.LogroInsigniaDTO;
 import pe.edu.upc.apifoodsave.dtos.LogroListDTO;
 import pe.edu.upc.apifoodsave.dtos.LogroUpdateDTO;
 import pe.edu.upc.apifoodsave.entities.Logro;
+import pe.edu.upc.apifoodsave.repositories.IClasificacionSemanalRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.ILogroService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 public class LogroController {
     @Autowired
     private ILogroService service;
+    @Autowired
+    private IClasificacionSemanalRepository clasificacionRepo;
 
     @PostMapping("/nuevos")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
@@ -81,33 +85,39 @@ public class LogroController {
         return ResponseEntity.ok("Logro con ID " + id + " eliminado correctamente.");
     }
 
-    @GetMapping("/Insignia")
-    public ResponseEntity<?>  listarInsignia() {
-        List<String[]> insignias=service.InsigniasService();
-        List<LogroInsigniaDTO> listarInsignias=new ArrayList<>();
-        if (insignias.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontraron Insignias");
+    @PostMapping("/asignar-auto")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    public Map<String, Object> asignarLogrosAutomaticamente() {
+        // 1) Asegurar la regla: puntos = 10 * kg (JPQL)
+        int filasPuntos = clasificacionRepo.recalcularPuntosParaTodos();
+
+        // 2) Asignar logros con los totales actuales (usa SUM(puntaje_clasificacion))
+        int insertados = service.asignarLogrosAutomaticamente();
+
+        return Map.of(
+                "filas_puntos_actualizadas", filasPuntos,
+                "logros_nuevos_asignados", insertados,
+                "mensaje", "Puntos recalculados y logros asignados"
+        );
+    }
+
+    @GetMapping("/usuarios/{idUsuario}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    public List<LogroInsigniaDTO> verLogrosDeUsuario(@PathVariable int idUsuario) {
+        List<Object[]> rows = service.verLogrosDeUsuario(idUsuario);
+        List<LogroInsigniaDTO> out = new ArrayList<>(rows.size());
+        for (Object[] r : rows) {
+            LogroInsigniaDTO dto = new LogroInsigniaDTO();
+            dto.setUsername((String) r[0]);
+            dto.setNombreLogro((String) r[1]);
+            dto.setPuntosTotales(r[2] == null ? 0 : ((Number) r[2]).intValue());
+            dto.setKgTotales(r[3] == null ? 0.0 : ((Number) r[3]).doubleValue());
+            Object f = r[4];
+            if (f instanceof java.sql.Timestamp ts) dto.setFechaLogro(ts.toLocalDateTime());
+            else if (f instanceof java.time.OffsetDateTime odt) dto.setFechaLogro(odt.toLocalDateTime());
+            else dto.setFechaLogro((java.time.LocalDateTime) f);
+            out.add(dto);
         }
-        for(String[] columna:insignias){
-            LogroInsigniaDTO dto=new LogroInsigniaDTO();
-
-            int idUsuario = Integer.parseInt(columna[0]);
-            String nombre = columna[1];
-            double kgSalvadosClasificacion = Double.parseDouble(columna[2]);
-            int nombreLogro = Integer.parseInt(columna[3]);
-            String descripcionLogro = columna[4];
-            int puntosLogro = Integer.parseInt(columna[5]);
-
-            dto.setIdUsuario(idUsuario);
-            dto.setNombre(nombre);
-            dto.setKgSalvadosClasificacion(kgSalvadosClasificacion);
-            dto.setNombreLogro(nombreLogro);
-            dto.setDescripcionLogro(descripcionLogro);
-            dto.setPuntosLogro(puntosLogro);
-
-            listarInsignias.add(dto);
-        }
-        return ResponseEntity.ok(listarInsignias);
+        return out;
     }
 }

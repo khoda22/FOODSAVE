@@ -30,15 +30,18 @@ public class ClasificacionSemanalController {
     @PostMapping("/nuevos")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> insertar(@RequestBody ClasificacionInsertDTO dto) {
-        ModelMapper m = new ModelMapper();
-        ClasificacionSemanal c = m.map(dto, ClasificacionSemanal.class);
-
         if (dto.getIdUsuario() <= 0) {
             return ResponseEntity.badRequest().body("idUsuario es obligatorio y debe ser > 0");
         }
+
+        ClasificacionSemanal c = new ClasificacionSemanal();
+        c.setPeriodoClasificacion(dto.getPeriodo());
+        c.setKgSalvadosClasificacion(dto.getKgSalvados());
         c.setUsuario(usuarioRepository.getReferenceById(dto.getIdUsuario()));
+
+        // 👇 Ya no hace falta calcular puntaje: se hace automático al persistir
         service.insert(c);
-        return ResponseEntity.ok("Clasificación registrada.");
+        return ResponseEntity.ok("Clasificación registrada correctamente.");
     }
 
     @GetMapping("/listas")
@@ -51,7 +54,7 @@ public class ClasificacionSemanalController {
             dto.setPuntaje(c.getPuntajeClasificacion());
             dto.setKgSalvados(c.getKgSalvadosClasificacion());
             if (c.getUsuario() != null) {
-                dto.setNombreUsuario(c.getUsuario().getusername());
+                dto.setNombreUsuario(c.getUsuario().getUsername());
             }
             return dto;
         }).collect(Collectors.toList());
@@ -78,24 +81,22 @@ public class ClasificacionSemanalController {
     @PutMapping("/editar")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody ClasificacionUpdateDTO dto) {
-        ModelMapper m = new ModelMapper();
-        ClasificacionSemanal c = m.map(dto, ClasificacionSemanal.class);
-
-        ClasificacionSemanal existente = service.listId(c.getIdClasificacion());
+        ClasificacionSemanal existente = service.listId(dto.getIdClasificacion());
         if (existente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se puede modificar. No existe una clasificación con el ID: " + c.getIdClasificacion());
+                    .body("No se puede modificar. No existe una clasificación con el ID: " + dto.getIdClasificacion());
         }
+
+        existente.setPeriodoClasificacion(dto.getPeriodoClasificacion());
+        existente.setKgSalvadosClasificacion(dto.getKgSalvadosClasificacion());
+        // El puntaje se recalcula automáticamente por @PreUpdate
 
         if (dto.getIdUsuario() > 0) {
-            c.setUsuario(usuarioRepository.getReferenceById(dto.getIdUsuario()));
-        } else {
-            c.setUsuario(existente.getUsuario());
+            existente.setUsuario(usuarioRepository.getReferenceById(dto.getIdUsuario()));
         }
-        c.setUsuario(existente.getUsuario());
 
-        service.edit(c);
-        return ResponseEntity.ok("Clasificación con ID " + c.getIdClasificacion() + " modificada correctamente.");
+        service.edit(existente);
+        return ResponseEntity.ok("Clasificación actualizada correctamente.");
     }
 
     @DeleteMapping("/{id}")
@@ -110,31 +111,41 @@ public class ClasificacionSemanalController {
         return ResponseEntity.ok("Clasificación con ID " + id + " eliminada correctamente.");
     }
 
-    @GetMapping("/rankSemanal")
-    public ResponseEntity<?> rankSemanal() {
-        List<String[]> rank=service.RankClasificacionSemanalService();
-        List<ClasificacionSemanalRankDTO> listaRank=new ArrayList<>();
-
-        if (rank.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontraron proveedores registrados ");
+    // Ranking por período explícito, ej: 2025-W37
+    @GetMapping("/clasificacion-semanal/ranking/{periodo}")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    public List<ClasificacionSemanalRankDTO> rankingPorPeriodo(@PathVariable String periodo) {
+        List<Object[]> rows = service.rankingSemanal(periodo);
+        List<ClasificacionSemanalRankDTO> out = new ArrayList<>(rows.size());
+        for (Object[] r : rows) {
+            ClasificacionSemanalRankDTO dto = new ClasificacionSemanalRankDTO();
+            dto.setPosicion(((Number) r[0]).intValue());
+            dto.setIdUsuario(((Number) r[1]).intValue());
+            dto.setUsername((String) r[2]);
+            dto.setKgTotales(r[3] == null ? 0.0 : ((Number) r[3]).doubleValue());
+            dto.setPuntosTotales(r[4] == null ? 0 : ((Number) r[4]).intValue());
+            dto.setPeriodo((String) r[5]);
+            out.add(dto);
         }
-        for(String[] columna:rank){
-            ClasificacionSemanalRankDTO dto=new ClasificacionSemanalRankDTO();
-            // columna[0] = amount
-            int idUsuario = Integer.parseInt(columna[0]);
-            String nombre = columna[1];
-            int puntosLogro = Integer.parseInt(columna[2]);
-            double kgSalvadosClasificacion = Double.parseDouble(columna[3]);
+        return out;
+    }
 
-            dto.setIdUsuario(idUsuario);
-            dto.setNombre(nombre);
-            dto.setPuntosLogro(puntosLogro);
-            dto.setKgSalvadosClasificacion(kgSalvadosClasificacion);
-
-            listaRank.add(dto);
+    // Ranking de la semana ISO actual (2025-W37, etc.)
+    @GetMapping("/ranking/actual")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    public List<ClasificacionSemanalRankDTO> rankingSemanaActual() {
+        List<Object[]> rows = service.rankingSemanalActual();
+        List<ClasificacionSemanalRankDTO> out = new ArrayList<>(rows.size());
+        for (Object[] r : rows) {
+            ClasificacionSemanalRankDTO dto = new ClasificacionSemanalRankDTO();
+            dto.setPosicion(((Number) r[0]).intValue());
+            dto.setIdUsuario(((Number) r[1]).intValue());
+            dto.setUsername((String) r[2]);
+            dto.setKgTotales(r[3] == null ? 0.0 : ((Number) r[3]).doubleValue());
+            dto.setPuntosTotales(r[4] == null ? 0 : ((Number) r[4]).intValue());
+            dto.setPeriodo((String) r[5]); // periodo_actual
+            out.add(dto);
         }
-        return ResponseEntity.ok(listaRank);
-
+        return out;
     }
 }

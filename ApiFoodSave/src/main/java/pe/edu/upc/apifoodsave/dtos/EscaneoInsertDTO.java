@@ -3,10 +3,11 @@ package pe.edu.upc.apifoodsave.dtos;
 import java.time.LocalDate;
 
 public class EscaneoInsertDTO {
-    private LocalDate fechaEscaneo;
-    private String origen;
-    private int idUsuario;
-    private int idProducto;
+    private LocalDate fechaEscaneo;   // opcional: si no viene, se usa hoy
+    private String origen;            // "QR", "BARRAS", "MANUAL"
+    private Integer idUsuario;        // requerido
+    private Integer idProducto;       // opcional si mandas codigoBarra
+    private String codigoBarra;
 
     public LocalDate getFechaEscaneo() {
         return fechaEscaneo;
@@ -24,19 +25,27 @@ public class EscaneoInsertDTO {
         this.origen = origen;
     }
 
-    public int getIdUsuario() {
+    public Integer getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
 
-    public int getIdProducto() {
+    public Integer getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto(Integer idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public String getCodigoBarra() {
+        return codigoBarra;
+    }
+
+    public void setCodigoBarra(String codigoBarra) {
+        this.codigoBarra = codigoBarra;
     }
 }

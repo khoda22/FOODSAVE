@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.dtos;
 public class FavoritoRecetaDTOList {
     private Integer idFavorito;
     private Integer idReceta;
+    private Integer idUsuario;
     private String tituloReceta;
 
     public Integer getIdFavorito() {
@@ -19,6 +20,14 @@ public class FavoritoRecetaDTOList {
 
     public void setIdReceta(Integer idReceta) {
         this.idReceta = idReceta;
+    }
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getTituloReceta() {

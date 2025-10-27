@@ -26,7 +26,7 @@ public class UsuarioServiceImplements implements IUsuarioService {
 
     @Override
     public Usuario listarporid(int id) {
-        return uR.findById(id).orElse(new Usuario());
+        return uR.findById(id).orElse(null);
     }
 
     @Override

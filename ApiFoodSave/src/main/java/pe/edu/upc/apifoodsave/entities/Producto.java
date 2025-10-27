@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idProducto;
+    private Integer idProducto;
 
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
@@ -23,15 +23,15 @@ public class Producto {
     @Column(name = "estado", nullable = false, length = 40)
     private String estado;
 
-    @Column(name = "codigo_barra", nullable = false)
-    private int codigoBarra;
+    @Column(name = "codigo_barra")
+    private String codigoBarra;
 
     @Column(name = "peso_unitario", nullable = false)
     private double pesoUnitario;
 
     public Producto() {}
 
-    public Producto(int idProducto, String nombre, String categoria, int vidaUtilDias, String estado, int codigoBarra, double pesoUnitario) {
+    public Producto(int idProducto, String nombre, String categoria, int vidaUtilDias, String estado, String codigoBarra, double pesoUnitario) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.categoria = categoria;
@@ -81,19 +81,19 @@ public class Producto {
         this.estado = estado;
     }
 
-    public int getCodigoBarra() {
-        return codigoBarra;
-    }
-
-    public void setCodigoBarra(int codigoBarra) {
-        this.codigoBarra = codigoBarra;
-    }
-
     public double getPesoUnitario() {
         return pesoUnitario;
     }
 
     public void setPesoUnitario(double pesoUnitario) {
         this.pesoUnitario = pesoUnitario;
+    }
+
+    public String getCodigoBarra() {
+        return codigoBarra;
+    }
+
+    public void setCodigoBarra(String codigoBarra) {
+        this.codigoBarra = codigoBarra;
     }
 }

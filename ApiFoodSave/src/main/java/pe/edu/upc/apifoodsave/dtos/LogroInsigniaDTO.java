@@ -1,58 +1,51 @@
 package pe.edu.upc.apifoodsave.dtos;
 
+import java.time.LocalDateTime;
+
 public class LogroInsigniaDTO {
-    private int idUsuario;
-    private String nombre;
-    private double kgSalvadosClasificacion;
-    private int nombreLogro;
-    private String descripcionLogro;
-    private int puntosLogro; //debe ser 0
+    private String username;
+    private String nombreLogro;
+    private Integer puntosTotales;
+    private Double kgTotales;
+    private LocalDateTime fechaLogro;
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public String getUsername() {
+        return username;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public double getKgSalvadosClasificacion() {
-        return kgSalvadosClasificacion;
-    }
-
-    public void setKgSalvadosClasificacion(double kgSalvadosClasificacion) {
-        this.kgSalvadosClasificacion = kgSalvadosClasificacion;
-    }
-
-    public int getNombreLogro() {
+    public String getNombreLogro() {
         return nombreLogro;
     }
 
-    public void setNombreLogro(int nombreLogro) {
+    public void setNombreLogro(String nombreLogro) {
         this.nombreLogro = nombreLogro;
     }
 
-    public String getDescripcionLogro() {
-        return descripcionLogro;
+    public Integer getPuntosTotales() {
+        return puntosTotales;
     }
 
-    public void setDescripcionLogro(String descripcionLogro) {
-        this.descripcionLogro = descripcionLogro;
+    public void setPuntosTotales(Integer puntosTotales) {
+        this.puntosTotales = puntosTotales;
     }
 
-    public int getPuntosLogro() {
-        return puntosLogro;
+    public Double getKgTotales() {
+        return kgTotales;
     }
 
-    public void setPuntosLogro(int puntosLogro) {
-        this.puntosLogro = puntosLogro;
+    public void setKgTotales(Double kgTotales) {
+        this.kgTotales = kgTotales;
+    }
+
+    public LocalDateTime getFechaLogro() {
+        return fechaLogro;
+    }
+
+    public void setFechaLogro(LocalDateTime fechaLogro) {
+        this.fechaLogro = fechaLogro;
     }
 }

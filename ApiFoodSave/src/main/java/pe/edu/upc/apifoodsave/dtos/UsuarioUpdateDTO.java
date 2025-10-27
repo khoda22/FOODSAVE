@@ -2,8 +2,6 @@ package pe.edu.upc.apifoodsave.dtos;
 
 import pe.edu.upc.apifoodsave.entities.Rol;
 
-import java.time.LocalDateTime;
-
 public class UsuarioUpdateDTO {
     private int idUsuario;
     private String username;
@@ -11,7 +9,6 @@ public class UsuarioUpdateDTO {
     private String email;
     private String foto;
     private String ubicacion;
-    private LocalDateTime login;
     private Boolean estado;
     private Rol rol;
 
@@ -61,14 +58,6 @@ public class UsuarioUpdateDTO {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
-    }
-
-    public LocalDateTime getLogin() {
-        return login;
-    }
-
-    public void setLogin(LocalDateTime login) {
-        this.login = login;
     }
 
     public Boolean getEstado() {

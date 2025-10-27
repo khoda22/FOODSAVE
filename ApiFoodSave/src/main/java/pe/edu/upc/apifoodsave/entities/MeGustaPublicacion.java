@@ -3,18 +3,21 @@ package pe.edu.upc.apifoodsave.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "MeGustaPublicacion")
+@Table(
+        name = "MeGustaPublicacion",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"idUsuario", "idPublicacion"})
+)
 public class MeGustaPublicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idMeGusta;
 
     @ManyToOne
-    @JoinColumn(name = "idUsuario")
+    @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "idPublicacion")
+    @JoinColumn(name = "idPublicacion", nullable = false)
     private Publicacion publicacion;
 
     public MeGustaPublicacion() {

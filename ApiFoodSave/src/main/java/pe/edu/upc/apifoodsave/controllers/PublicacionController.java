@@ -10,9 +10,13 @@ import pe.edu.upc.apifoodsave.dtos.PublicacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.PublicacionListDTO;
 import pe.edu.upc.apifoodsave.dtos.PublicacionUpdateDTO;
 import pe.edu.upc.apifoodsave.entities.Publicacion;
+import pe.edu.upc.apifoodsave.entities.Receta;
+import pe.edu.upc.apifoodsave.entities.Usuario;
+import pe.edu.upc.apifoodsave.repositories.IRecetaRepository;
 import pe.edu.upc.apifoodsave.repositories.IUsuarioRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IPublicacionService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,32 +27,43 @@ public class PublicacionController {
     private IPublicacionService service;
     @Autowired
     private IUsuarioRepository usuarioRepository;
+    @Autowired
+    private IRecetaRepository recetaRepository;
 
     @PostMapping("/nuevos")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
-    public void insertar(@RequestBody PublicacionInsertDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Publicacion p = m.map(dto, Publicacion.class);
+    public ResponseEntity<?> crear(@RequestBody PublicacionInsertDTO dto) {
+        // Validación mínima
+        if (dto.getContenidoPublicacion() == null || dto.getContenidoPublicacion().isBlank())
+            return ResponseEntity.badRequest().body("contenidoPublicacion es obligatorio.");
+        if (dto.getIdUsuario() <= 0 || dto.getIdReceta() <= 0)
+            return ResponseEntity.badRequest().body("idUsuario e idReceta deben ser > 0.");
 
-        // resolver FK usuario por id
-        if (dto.getIdUsuario() > 0) {
-            p.setUsuario(usuarioRepository.getReferenceById(dto.getIdUsuario()));
-        }
+        // Resolver FKs (si no existen, 400)
+        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario()).orElse(null);
+        if (usuario == null) return ResponseEntity.badRequest().body("Usuario no existe: " + dto.getIdUsuario());
+        Receta receta = recetaRepository.findById(dto.getIdReceta()).orElse(null);
+        if (receta == null) return ResponseEntity.badRequest().body("Receta no existe: " + dto.getIdReceta());
+
+        // Armar entidad (sin complicar con ModelMapper)
+        Publicacion p = new Publicacion();
+        p.setContenidoPublicacion(dto.getContenidoPublicacion());
+        p.setFotoUrlPublicacion(dto.getFotoUrlPublicacion());
+        p.setFechaCreacionPublicacion(LocalDateTime.now()); // también lo hace @PrePersist
+        p.setUsuario(usuario);
+        p.setReceta(receta);
+
         service.insert(p);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Publicación creada. ID: " + p.getIdPublicacion());
     }
 
     @GetMapping("/listas")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<PublicacionListDTO> listar() {
+        ModelMapper m = new ModelMapper();
         return service.list().stream().map(p -> {
-            PublicacionListDTO dto = new PublicacionListDTO();
-            dto.setIdPublicacion(p.getIdPublicacion());
-            dto.setContenido(p.getContenidoPublicacion());
-            dto.setFotoUrl(p.getFotoUrlPublicacion());
-            dto.setFechaCreacion(p.getFechaCreacionPublicacion());
-
+            PublicacionListDTO dto = m.map(p, PublicacionListDTO.class);
             if (p.getUsuario() != null) {
-                //dto.setNombreUsuario(p.getUsuario().getNombreUsuario());
+                dto.setUsername(p.getUsuario().getUsername());
             }
             return dto;
         }).collect(Collectors.toList());
@@ -62,28 +77,33 @@ public class PublicacionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No existe un registro con el ID: " + id);
         }
-        PublicacionUpdateDTO dto = new PublicacionUpdateDTO();
-        dto.setIdPublicacion(p.getIdPublicacion());
-        dto.setContenido(p.getContenidoPublicacion());
-        dto.setFotoUrl(p.getFotoUrlPublicacion());
+        ModelMapper m = new ModelMapper();
+        PublicacionListDTO dto = m.map(p, PublicacionListDTO.class);
+        dto.setUsername(p.getUsuario() != null ? p.getUsuario().getUsername() : null);
+
         return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/editar")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody PublicacionUpdateDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Publicacion p = m.map(dto, Publicacion.class);
-
-        Publicacion existente = service.listId(p.getIdPublicacion());
+        Publicacion existente = service.listId(dto.getIdPublicacion());
         if (existente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se puede modificar. No existe un registro con el ID: " + p.getIdPublicacion());
+                    .body("No se puede modificar. No existe un registro con el ID: " + dto.getIdPublicacion());
         }
-        // mantener el usuario existente si no viene en el cuerpo
-        p.setUsuario(existente.getUsuario());
 
-        service.edit(p);
-        return ResponseEntity.ok("Registro con ID " + p.getIdPublicacion() + " modificado correctamente.");
+        ModelMapper m = new ModelMapper();
+        m.getConfiguration().setSkipNullEnabled(true);
+        m.typeMap(PublicacionUpdateDTO.class, Publicacion.class).addMappings(mp -> {
+            mp.skip(Publicacion::setIdPublicacion);
+            mp.skip(Publicacion::setUsuario);
+            mp.skip(Publicacion::setReceta);
+            mp.skip(Publicacion::setFechaCreacionPublicacion);
+        });
+        m.map(dto, existente); // patch
+
+        service.edit(existente);
+        return ResponseEntity.ok("Registro con ID " + dto.getIdPublicacion() + " modificado correctamente.");
     }
 }

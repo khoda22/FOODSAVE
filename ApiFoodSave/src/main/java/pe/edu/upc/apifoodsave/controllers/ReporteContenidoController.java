@@ -69,7 +69,7 @@ public class ReporteContenidoController {
     }
 
     @PutMapping("/editar")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public ResponseEntity<String> editar(@RequestBody ReporteContenidoDTOUpdate dto) {
         ReporteContenido existente = service.listId(dto.getIdReporte());
         if (existente == null) {

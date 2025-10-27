@@ -1,25 +1,25 @@
 package pe.edu.upc.apifoodsave.dtos;
 
 public class PublicacionInsertDTO {
-    private String contenido;
-    private String fotoUrl;
+    private String contenidoPublicacion;
+    private String fotoUrlPublicacion;
     private int idUsuario;
     private int idReceta;
 
-    public String getFotoUrl() {
-        return fotoUrl;
+    public String getContenidoPublicacion() {
+        return contenidoPublicacion;
     }
 
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
+    public void setContenidoPublicacion(String contenidoPublicacion) {
+        this.contenidoPublicacion = contenidoPublicacion;
     }
 
-    public String getContenido() {
-        return contenido;
+    public String getFotoUrlPublicacion() {
+        return fotoUrlPublicacion;
     }
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
+    public void setFotoUrlPublicacion(String fotoUrlPublicacion) {
+        this.fotoUrlPublicacion = fotoUrlPublicacion;
     }
 
     public int getIdUsuario() {

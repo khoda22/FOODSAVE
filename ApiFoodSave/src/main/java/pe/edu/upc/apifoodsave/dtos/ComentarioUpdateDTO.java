@@ -1,7 +1,15 @@
 package pe.edu.upc.apifoodsave.dtos;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class ComentarioUpdateDTO {
+    @Min(1)
     private int idComentario;
+
+    @NotBlank
+    @Size(max = 1000)
     private String contenido;
 
     public int getIdComentario() {

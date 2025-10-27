@@ -29,8 +29,8 @@ public class Usuario {
     @Column(name = "login", nullable = false)
     private LocalDateTime login;
 
-    @Column(name = "fechaCreacion", nullable = false)
-    private LocalDateTime Creacion;
+    @Column(name = "fechaCreacion", nullable = false, updatable = false)
+    private LocalDateTime creacion;
 
     @Column(name = "estado", nullable = false)
     private Boolean estado;
@@ -41,30 +41,22 @@ public class Usuario {
 
     @PrePersist
     public void prePersist() {
-        if (this.Creacion == null) this.Creacion = LocalDateTime.now();
+        if (this.creacion == null) this.creacion = LocalDateTime.now();
     }
 
     public Usuario() {}
 
-    public Usuario(int idUsuario, Rol rol, String username, String email, String password, String foto, Boolean estado, LocalDateTime creacion, LocalDateTime login, String ubicacion) {
+    public Usuario(int idUsuario, String username, String email, String password, String foto, String ubicacion, LocalDateTime login, LocalDateTime creacion, Boolean estado, Rol rol) {
         this.idUsuario = idUsuario;
-        this.rol = rol;
         this.username = username;
         this.email = email;
         this.password = password;
         this.foto = foto;
-        this.estado = estado;
-        Creacion = creacion;
-        this.login = login;
         this.ubicacion = ubicacion;
-    }
-
-    public String getusername() {
-        return username;
-    }
-
-    public void setusername(String username) {
-        this.username = username;
+        this.login = login;
+        this.creacion = creacion;
+        this.estado = estado;
+        this.rol = rol;
     }
 
     public Rol getRol() {
@@ -134,11 +126,19 @@ public class Usuario {
         this.login = login;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public LocalDateTime getCreacion() {
-        return Creacion;
+        return creacion;
     }
 
     public void setCreacion(LocalDateTime creacion) {
-        Creacion = creacion;
+        this.creacion = creacion;
     }
 }

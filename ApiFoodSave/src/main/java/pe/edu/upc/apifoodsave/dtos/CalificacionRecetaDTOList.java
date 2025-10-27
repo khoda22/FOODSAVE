@@ -3,6 +3,7 @@ package pe.edu.upc.apifoodsave.dtos;
 public class CalificacionRecetaDTOList {
     private Integer idCalificacionReceta;
     private Integer calificacion;
+    private Integer idUsuario;
     private Integer idReceta;
     private String tituloReceta;
 
@@ -20,6 +21,14 @@ public class CalificacionRecetaDTOList {
 
     public void setCalificacion(Integer calificacion) {
         this.calificacion = calificacion;
+    }
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Integer getIdReceta() {

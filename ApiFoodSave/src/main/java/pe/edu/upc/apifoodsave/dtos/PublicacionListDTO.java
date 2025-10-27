@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 public class PublicacionListDTO {
     private int idPublicacion;
-    private String contenido;
-    private String fotoUrl;
-    private LocalDateTime fechaCreacion;
-    private String nombreUsuario;
+    private String contenidoPublicacion;
+    private String fotoUrlPublicacion;
+    private LocalDateTime fechaCreacionPublicacion;
+    private String username;
 
     public int getIdPublicacion() {
         return idPublicacion;
@@ -17,35 +17,35 @@ public class PublicacionListDTO {
         this.idPublicacion = idPublicacion;
     }
 
-    public String getContenido() {
-        return contenido;
+    public String getContenidoPublicacion() {
+        return contenidoPublicacion;
     }
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
+    public void setContenidoPublicacion(String contenidoPublicacion) {
+        this.contenidoPublicacion = contenidoPublicacion;
     }
 
-    public String getFotoUrl() {
-        return fotoUrl;
+    public String getFotoUrlPublicacion() {
+        return fotoUrlPublicacion;
     }
 
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
+    public void setFotoUrlPublicacion(String fotoUrlPublicacion) {
+        this.fotoUrlPublicacion = fotoUrlPublicacion;
     }
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public LocalDateTime getFechaCreacionPublicacion() {
+        return fechaCreacionPublicacion;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setFechaCreacionPublicacion(LocalDateTime fechaCreacionPublicacion) {
+        this.fechaCreacionPublicacion = fechaCreacionPublicacion;
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

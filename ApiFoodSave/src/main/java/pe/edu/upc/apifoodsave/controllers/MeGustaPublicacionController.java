@@ -12,46 +12,54 @@ import pe.edu.upc.apifoodsave.repositories.IPublicacionRepository;
 import pe.edu.upc.apifoodsave.repositories.IUsuarioRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IMeGustaPublicacionService;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/megustapubicacion")
-public class MeGustaPubicacionController {
-    @Autowired private IMeGustaPublicacionService service;                 // service simple: save/delete/findAll/findById
-    @Autowired private IMeGustaPublicacionRepository meGustaRepo;          // para validar duplicados (opcional)
-    @Autowired private IUsuarioRepository usuarioRepo;          // resolver FK
-    @Autowired private IPublicacionRepository publicacionRepo;  // resolver FK
+@RequestMapping("/megustapublicacion")
+public class MeGustaPublicacionController {
+    @Autowired private IMeGustaPublicacionService service;
+    @Autowired private IMeGustaPublicacionRepository meGustaRepo;
+    @Autowired private IUsuarioRepository usuarioRepo;
+    @Autowired private IPublicacionRepository publicacionRepo;
 
-    // Crear like (USUARIO)
+    // Crear like (USUARIO)  -> 201 o 409 si ya existe
     @PostMapping("/nuevos")
-    @PreAuthorize("hasAuthority('USUARIO')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<String> insertar(@RequestBody LikeDTO dto) {
+
         if (dto.getIdUsuario() <= 0 || dto.getIdPublicacion() <= 0) {
-            return ResponseEntity.badRequest().body("idUsuario e idPublicacion deben ser > 0");
+            return ResponseEntity.badRequest().body("idUsuario e idPublicacion deben ser > 0.");
         }
 
-        // Evitar duplicado (opcional pero recomendado)
-        boolean existe = meGustaRepo.existsByUsuario_IdUsuarioAndPublicacion_IdPublicacion(
-                dto.getIdUsuario(), dto.getIdPublicacion());
-        if (existe) {
+        // validar existencia de FK (evita EntityNotFoundException de getReferenceById)
+        var usuario = usuarioRepo.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + dto.getIdUsuario()));
+        var publicacion = publicacionRepo.findById(dto.getIdPublicacion())
+                .orElseThrow(() -> new IllegalArgumentException("Publicación no encontrada: " + dto.getIdPublicacion()));
+
+        // evitar duplicado
+        if (meGustaRepo.existsByUsuario_IdUsuarioAndPublicacion_IdPublicacion(dto.getIdUsuario(), dto.getIdPublicacion())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe el like para esta publicación.");
         }
 
         MeGustaPublicacion mg = new MeGustaPublicacion();
-        mg.setUsuario(usuarioRepo.getReferenceById(dto.getIdUsuario()));
-        mg.setPublicacion(publicacionRepo.getReferenceById(dto.getIdPublicacion()));
+        mg.setUsuario(usuario);
+        mg.setPublicacion(publicacion);
 
         service.insert(mg);
-        return ResponseEntity.ok("Like registrado.");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Like registrado.");
     }
 
-    //Eliminar like por par (idUsuario, idPublicacion)
+    // Eliminar like por par (idUsuario, idPublicacion) -> 200 o 404
     @DeleteMapping("/eliminar")
-    @PreAuthorize("hasAuthority('USUARIO')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<String> eliminarPorPar(@RequestBody LikeDTO dto) {
+        if (dto.getIdUsuario() <= 0 || dto.getIdPublicacion() <= 0) {
+            return ResponseEntity.badRequest().body("idUsuario e idPublicacion deben ser > 0.");
+        }
+
         if (!meGustaRepo.existsByUsuario_IdUsuarioAndPublicacion_IdPublicacion(dto.getIdUsuario(), dto.getIdPublicacion())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el like para ese usuario/publicación.");
         }
+
         meGustaRepo.deleteByUsuario_IdUsuarioAndPublicacion_IdPublicacion(dto.getIdUsuario(), dto.getIdPublicacion());
         return ResponseEntity.ok("Like eliminado.");
     }

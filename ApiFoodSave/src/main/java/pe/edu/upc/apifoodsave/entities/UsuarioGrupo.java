@@ -22,12 +22,13 @@ public class UsuarioGrupo {
     @Column(name = "fechaUnion", nullable = false)
     private LocalDateTime fechaUnion;
 
-    @Column(name = "rolGrupo", length = 30)
+    @Column(name = "rol_grupo", nullable = false, length = 20)
     private String rolGrupo;
 
     @PrePersist
-    public void prePersist() {
-        if (this.fechaUnion == null) this.fechaUnion = LocalDateTime.now();
+    void defaults() {
+        if (rolGrupo == null || rolGrupo.isBlank()) rolGrupo = "PARTICIPANTE";
+        if (fechaUnion == null) fechaUnion = LocalDateTime.now();
     }
 
     public UsuarioGrupo() {

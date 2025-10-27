@@ -26,6 +26,7 @@ public class UsuarioLogroController {
     @Autowired
     private ILogroRepository logroRepository;
 
+    /*
     @PostMapping("/nuevos")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> asignar(@RequestBody UsuarioLogroDTO dto) {
@@ -40,6 +41,8 @@ public class UsuarioLogroController {
         service.insert(ul);
         return ResponseEntity.ok("Logro asignado al usuario.");
     }
+
+     */
 
     @DeleteMapping("/eliminar/{id}")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")

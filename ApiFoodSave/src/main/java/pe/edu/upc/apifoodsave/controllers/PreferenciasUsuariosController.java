@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.apifoodsave.dtos.PreferenciasUsuarioDTO;
+import pe.edu.upc.apifoodsave.dtos.PreferenciasUsuariosDTOInsert;
 import pe.edu.upc.apifoodsave.entities.PreferenciasUsuario;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IPreferenciasUsuarioService;
 
@@ -26,7 +27,7 @@ public class PreferenciasUsuariosController {
     }
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
-    public void Registrar(@RequestBody PreferenciasUsuarioDTO dto){
+    public void Registrar(@RequestBody PreferenciasUsuariosDTOInsert dto){
         ModelMapper m = new ModelMapper();
         PreferenciasUsuario pu = m.map(dto, PreferenciasUsuario.class);
         puS.Registrar(pu);
@@ -40,7 +41,7 @@ public class PreferenciasUsuariosController {
     }
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
-    public void Modificar(@RequestBody PreferenciasUsuario dto){
+    public void Modificar(@RequestBody PreferenciasUsuarioDTO dto){
         ModelMapper m = new ModelMapper();
         PreferenciasUsuario fa = m.map(dto, PreferenciasUsuario.class);
         puS.Modificar(fa);

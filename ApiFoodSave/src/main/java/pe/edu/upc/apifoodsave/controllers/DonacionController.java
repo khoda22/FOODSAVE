@@ -10,6 +10,7 @@ import pe.edu.upc.apifoodsave.dtos.DonacionInsertDTO;
 import pe.edu.upc.apifoodsave.dtos.DonacionListDTO;
 import pe.edu.upc.apifoodsave.dtos.DonacionUpdateDTO;
 import pe.edu.upc.apifoodsave.entities.Donacion;
+import pe.edu.upc.apifoodsave.entities.Inventario;
 import pe.edu.upc.apifoodsave.repositories.IInventarioRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IDonacionService;
 
@@ -26,13 +27,35 @@ public class DonacionController {
 
     @PostMapping("/nuevos")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
-    public void insertar(@RequestBody DonacionInsertDTO dto) {
-        ModelMapper m = new ModelMapper();
-        Donacion d = m.map(dto, Donacion.class);
-        if (dto.getIdInventario() > 0) {
-            d.setInventario(inventarioRepository.getReferenceById(dto.getIdInventario()));
+    public ResponseEntity<?> insertar(@RequestBody DonacionInsertDTO dto) {
+
+        // Validaciones rápidas
+        if (dto.getUbicacion() == null || dto.getUbicacion().isBlank()) {
+            return ResponseEntity.badRequest().body("ubicacion es obligatorio.");
         }
+        if (dto.getFechaProgramada() == null) {
+            return ResponseEntity.badRequest().body("fechaProgramada es obligatoria.");
+        }
+        if (dto.getIdInventario() <= 0) {
+            return ResponseEntity.badRequest().body("idInventario debe ser > 0.");
+        }
+
+        // Verificar que el Inventario exista (evita fallas de FK al guardar)
+        Inventario inv = inventarioRepository.findById(dto.getIdInventario())
+                .orElse(null);
+        if (inv == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("No existe Inventario con id " + dto.getIdInventario());
+        }
+
+        // Construir la entidad manualmente (más claro que ModelMapper en este caso)
+        Donacion d = new Donacion();
+        d.setUbicacion(dto.getUbicacion());
+        d.setFechaProgramada(dto.getFechaProgramada());
+        d.setInventario(inv);
+
         service.insert(d);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/listas")
@@ -74,6 +97,7 @@ public class DonacionController {
         return ResponseEntity.ok("Donación " + d.getIdDonacion() + " actualizada.");
     }
 
+    /*
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
@@ -85,4 +109,6 @@ public class DonacionController {
         service.delete(id);
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
+
+     */
 }

@@ -48,6 +48,9 @@ public class FavoritoRecetaController {
                 dto.setIdReceta(f.getReceta().getIdReceta());
                 dto.setTituloReceta(f.getReceta().getTitulo());
             }
+            if (f.getUsuario() != null) {
+                dto.setIdUsuario(f.getUsuario().getIdUsuario());
+            }
             return dto;
         }).collect(Collectors.toList());
     }

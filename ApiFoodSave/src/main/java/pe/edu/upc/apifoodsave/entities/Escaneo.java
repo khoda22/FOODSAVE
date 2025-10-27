@@ -12,7 +12,7 @@ public class Escaneo {
     private Integer idEscaneo;
 
     @Column(name = "fecha_escaneo", nullable = false)
-    private LocalDate fechaEscaneo; // si luego quieres hora exacta, cambia a LocalDateTime
+    private LocalDate fechaEscaneo;
 
     @Column(name = "origen", length = 40, nullable = false) // "QR", "BARRAS", "MANUAL"
     private String origen;
@@ -24,6 +24,13 @@ public class Escaneo {
     @ManyToOne
     @JoinColumn(name = "id_producto", nullable = false)
     private Producto producto;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaEscaneo == null) {
+            this.fechaEscaneo = LocalDate.now();
+        }
+    }
 
     public Escaneo() {
     }

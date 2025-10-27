@@ -39,7 +39,14 @@ public class LogroServiceImplements implements ILogroService {
     }
 
     @Override
-    public List<String[]> InsigniasService() {
-        return repository.Insignias();
+    public int asignarLogrosAutomaticamente() {
+        return repository.asignarLogrosAutomaticamente();
     }
+
+    @Override
+    public List<Object[]> verLogrosDeUsuario(int idUsuario) {
+        return repository.verLogrosDeUsuario(idUsuario);
+    }
+
+
 }

@@ -22,7 +22,7 @@ public class GrupoController {
     private IGrupoService service;
 
     @PostMapping("/nuevos")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public void insertar(@RequestBody GrupoDTOInsert dto) {
         ModelMapper m = new ModelMapper();
         Grupo g = m.map(dto, Grupo.class);
@@ -52,7 +52,7 @@ public class GrupoController {
     }
 
     @PutMapping("/editar")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public ResponseEntity<String> editar(@RequestBody GrupoDTOUpdate dto) {
         ModelMapper m = new ModelMapper();
         Grupo g = m.map(dto, Grupo.class);
@@ -68,7 +68,7 @@ public class GrupoController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         Grupo existente = service.listId(id);
         if (existente == null) {

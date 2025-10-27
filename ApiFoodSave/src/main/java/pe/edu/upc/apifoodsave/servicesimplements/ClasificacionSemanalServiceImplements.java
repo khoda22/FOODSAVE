@@ -39,7 +39,13 @@ public class ClasificacionSemanalServiceImplements implements IClasificacionSema
     }
 
     @Override
-    public List<String[]> RankClasificacionSemanalService() {
-        return repository.RankClasificacionSemanal();
+    public List<Object[]> rankingSemanal(String periodo) {
+        return repository.rankingSemanal(periodo);
     }
+
+    @Override
+    public List<Object[]> rankingSemanalActual() {
+        return repository.rankingSemanalActual();
+    }
+
 }

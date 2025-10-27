@@ -1,19 +1,8 @@
 package pe.edu.upc.apifoodsave.dtos;
 
-import pe.edu.upc.apifoodsave.entities.Usuario;
-
-public class PreferenciasUsuarioDTO {
-    private int idPreferencias;
+public class PreferenciasUsuariosDTOInsert {
     private String preferenciasjson;
     private Integer idUsuario;
-
-    public int getIdPreferencias() {
-        return idPreferencias;
-    }
-
-    public void setIdPreferencias(int idPreferencias) {
-        this.idPreferencias = idPreferencias;
-    }
 
     public String getPreferenciasjson() {
         return preferenciasjson;

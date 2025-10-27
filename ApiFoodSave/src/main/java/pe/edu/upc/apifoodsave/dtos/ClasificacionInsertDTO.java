@@ -2,7 +2,6 @@ package pe.edu.upc.apifoodsave.dtos;
 
 public class ClasificacionInsertDTO {
     private String periodo;
-    private int puntaje;
     private double kgSalvados;
     private int idUsuario;
 
@@ -20,14 +19,6 @@ public class ClasificacionInsertDTO {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public int getPuntaje() {
-        return puntaje;
-    }
-
-    public void setPuntaje(int puntaje) {
-        this.puntaje = puntaje;
     }
 
     public double getKgSalvados() {

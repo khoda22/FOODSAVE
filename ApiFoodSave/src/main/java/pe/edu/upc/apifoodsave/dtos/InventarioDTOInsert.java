@@ -6,9 +6,7 @@ public class InventarioDTOInsert {
     private int idUsuario;
     private int idProducto;
     private int cantidadInventario;
-    private int diasduracionInventario;           // opcional si lo calculas
-    private String estadoInventario;              // opcional, puedes derivarlo
-    private LocalDate fechavencimientoInventario;
+    private int diasduracionInventario;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -40,21 +38,5 @@ public class InventarioDTOInsert {
 
     public void setDiasduracionInventario(int diasduracionInventario) {
         this.diasduracionInventario = diasduracionInventario;
-    }
-
-    public String getEstadoInventario() {
-        return estadoInventario;
-    }
-
-    public void setEstadoInventario(String estadoInventario) {
-        this.estadoInventario = estadoInventario;
-    }
-
-    public LocalDate getFechavencimientoInventario() {
-        return fechavencimientoInventario;
-    }
-
-    public void setFechavencimientoInventario(LocalDate fechavencimientoInventario) {
-        this.fechavencimientoInventario = fechavencimientoInventario;
     }
 }

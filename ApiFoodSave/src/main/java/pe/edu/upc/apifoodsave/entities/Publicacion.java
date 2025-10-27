@@ -39,7 +39,7 @@ public class Publicacion {
     public Publicacion() {
     }
 
-    public Publicacion(int idPublicacion, String contenidoPublicacion, String fotoUrlPublicacion, LocalDateTime fechaCreacionPublicacion, Usuario usuario/*, Receta receta*/) {
+    public Publicacion(int idPublicacion, String contenidoPublicacion, String fotoUrlPublicacion, LocalDateTime fechaCreacionPublicacion, Usuario usuario, Receta receta) {
         this.idPublicacion = idPublicacion;
         this.contenidoPublicacion = contenidoPublicacion;
         this.fotoUrlPublicacion = fotoUrlPublicacion;

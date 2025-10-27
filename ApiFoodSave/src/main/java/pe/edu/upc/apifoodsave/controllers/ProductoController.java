@@ -31,11 +31,13 @@ public class ProductoController {
     }
     @PostMapping("/nuevos")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
-    public void insertar(@RequestBody ProductoDTOInsert dto) {
-        ModelMapper m=new ModelMapper();
-        Producto prov=m.map(dto,Producto.class);
-        service.insert(prov);
+    public ResponseEntity<String> insertar(@RequestBody ProductoDTOInsert dto) {
+        ModelMapper mapper = new ModelMapper();
+        Producto producto = mapper.map(dto, Producto.class);
+        service.insert(producto);
+        return ResponseEntity.ok("Producto registrado correctamente");
     }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {

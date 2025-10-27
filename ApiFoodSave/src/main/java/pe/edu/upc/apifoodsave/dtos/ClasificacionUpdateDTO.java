@@ -3,7 +3,6 @@ package pe.edu.upc.apifoodsave.dtos;
 public class ClasificacionUpdateDTO {
     private int idClasificacion;
     private String periodoClasificacion;
-    private int puntajeClasificacion;
     private double kgSalvadosClasificacion;
     private int idUsuario;
 
@@ -21,14 +20,6 @@ public class ClasificacionUpdateDTO {
 
     public void setPeriodoClasificacion(String periodoClasificacion) {
         this.periodoClasificacion = periodoClasificacion;
-    }
-
-    public int getPuntajeClasificacion() {
-        return puntajeClasificacion;
-    }
-
-    public void setPuntajeClasificacion(int puntajeClasificacion) {
-        this.puntajeClasificacion = puntajeClasificacion;
     }
 
     public double getKgSalvadosClasificacion() {

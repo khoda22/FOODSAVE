@@ -95,14 +95,36 @@ public class UsuarioController {
         return dto;
     }
 
-
     @PutMapping("/actualizar")
     @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
-    public void Modificar(@RequestBody UsuarioUpdateDTO dto){
+    public ResponseEntity<String> modificar(@RequestBody UsuarioUpdateDTO dto) {
+
+        Usuario existente = uS.listarporid(dto.getIdUsuario());
+        if (existente == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se puede modificar. No existe un usuario con el ID: " + dto.getIdUsuario());
+        }
+
+        // Mapear los datos del DTO al usuario existente
         ModelMapper m = new ModelMapper();
-        Usuario u = m.map(dto,Usuario.class);
-        uS.Modificar(u);
+        m.getConfiguration().setSkipNullEnabled(true);
+        m.map(dto, existente);
+
+        // Encriptar y actualizar contraseña siempre
+        existente.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        // Actualizar rol si viene en el JSON
+        if (dto.getRol() != null && dto.getRol().getIdRol() != null) {
+            Rol rol = rolRepo.getReferenceById(dto.getRol().getIdRol());
+            existente.setRol(rol);
+        }
+
+        // Guardar cambios
+        uS.Modificar(existente);
+
+        return ResponseEntity.ok("Usuario con ID " + dto.getIdUsuario() + " modificado correctamente.");
     }
+
 
 
     @DeleteMapping( "/borrar/{id}")
