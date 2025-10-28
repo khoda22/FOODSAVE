@@ -1,23 +1,13 @@
 package pe.edu.upc.apifoodsave.dtos;
 
-import pe.edu.upc.apifoodsave.entities.Usuario;
-
 import java.time.LocalDateTime;
-public class ActividadUsuarioDTO {
-    private int idActividad;
+
+public class ActividadUsuarioDTOInsert {
     private String preferenciasjson;
     private String tipoAccion;
     private String descripcion;
-    private LocalDateTime Creacion;
-    private Usuario usuario;
-
-    public int getIdActividad() {
-        return idActividad;
-    }
-
-    public void setIdActividad(int idActividad) {
-        this.idActividad = idActividad;
-    }
+    private LocalDateTime fechaCreacion;
+    private Integer idUsuario;
 
     public String getPreferenciasjson() {
         return preferenciasjson;
@@ -43,19 +33,19 @@ public class ActividadUsuarioDTO {
         this.descripcion = descripcion;
     }
 
-    public LocalDateTime getCreacion() {
-        return Creacion;
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setCreacion(LocalDateTime creacion) {
-        Creacion = creacion;
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Integer getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }
