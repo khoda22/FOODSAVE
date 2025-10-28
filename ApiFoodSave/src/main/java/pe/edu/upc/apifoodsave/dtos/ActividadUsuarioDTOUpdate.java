@@ -1,43 +1,14 @@
-package pe.edu.upc.apifoodsave.entities;
-
-import jakarta.persistence.*;
+package pe.edu.upc.apifoodsave.dtos;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="ActividadUsuario")
-public class ActividadUsuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ActividadUsuarioDTOUpdate {
     private int idActividad;
-
-    @Column(name = "preferenciasjson", nullable = false)
     private String preferenciasjson;
-
-    @Column(name = "tipoAccion", nullable = false, length = 255)
     private String tipoAccion;
-
-    @Column(name = "descripcion", nullable = false, length = 255)
     private String descripcion;
-
-    @Column(name = "fechaCreacion", nullable = false)
     private LocalDateTime fechaCreacion;
-
-    @ManyToOne
-    @JoinColumn(name = "idUsuario")
-    private Usuario usuario;
-
-    public ActividadUsuario() {
-    }
-
-    public ActividadUsuario(int idActividad, String preferenciasjson, String tipoAccion, String descripcion, LocalDateTime fechaCreacion, Usuario usuario) {
-        this.idActividad = idActividad;
-        this.preferenciasjson = preferenciasjson;
-        this.tipoAccion = tipoAccion;
-        this.descripcion = descripcion;
-        this.fechaCreacion = fechaCreacion;
-        this.usuario = usuario;
-    }
+    private Integer idUsuario;
 
     public int getIdActividad() {
         return idActividad;
@@ -79,11 +50,11 @@ public class ActividadUsuario {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Integer getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

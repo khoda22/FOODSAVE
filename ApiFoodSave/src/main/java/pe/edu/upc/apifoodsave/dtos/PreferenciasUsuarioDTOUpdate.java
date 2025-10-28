@@ -3,7 +3,8 @@ package pe.edu.upc.apifoodsave.dtos;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class PreferenciasUsuariosDTOInsert {
+public class PreferenciasUsuarioDTOUpdate {
+    private Integer idPreferencias;
     private Boolean notificacionesActivas;
     private String temaVisual;
     private String idioma;
@@ -15,6 +16,14 @@ public class PreferenciasUsuariosDTOInsert {
     private LocalDate fechaInicioVacaciones;
     private LocalDate fechaFinVacaciones;
     private Integer idUsuario;
+
+    public Integer getIdPreferencias() {
+        return idPreferencias;
+    }
+
+    public void setIdPreferencias(Integer idPreferencias) {
+        this.idPreferencias = idPreferencias;
+    }
 
     public Boolean getNotificacionesActivas() {
         return notificacionesActivas;
