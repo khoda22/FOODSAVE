@@ -9,6 +9,15 @@ public class InventarioDTOList {
     private int cantidadInventario;
     private String estadoInventario;              // Ej: "OK", "POR_VENCER", "VENCIDO"
     private LocalDate fechavencimientoInventario;
+    private ProductoDTOList producto;
+
+    public ProductoDTOList getProducto() {
+        return producto;
+    }
+
+    public void setProducto(ProductoDTOList producto) {
+        this.producto = producto;
+    }
 
     public int getIdInventario() {
         return idInventario;

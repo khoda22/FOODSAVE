@@ -1,5 +1,6 @@
 package pe.edu.upc.apifoodsave.servicesinterfaces;
 
+import pe.edu.upc.apifoodsave.dtos.NotificacionPorGrupoDTO;
 import pe.edu.upc.apifoodsave.entities.Notificacion;
 
 import java.util.List;

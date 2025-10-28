@@ -10,4 +10,8 @@ public interface IProductoService {
     public Producto listId(int id);
     public void delete(int id);
     public void edit(Producto p);
+
+    List<Producto> buscarPorNombre(String nombre);
+    List<Producto> buscarPorCodigoBarra(Integer codigo);
+    List<Producto> sugerirProductosSimilares(String termino);
 }

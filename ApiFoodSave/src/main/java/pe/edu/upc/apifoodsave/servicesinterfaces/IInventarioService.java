@@ -11,4 +11,9 @@ public interface IInventarioService {
     public Inventario listId(int id);
     public void delete(int id);
     public void edit(Inventario p);
+
+    List<Inventario> listarOrdenadosPorFecha();
+    void cambiarEstado(int id, String estado);
+    List<Inventario> buscar(String nombre, String categoria);
+    List<Inventario> filtrarPorEstado(String estado);
 }

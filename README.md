@@ -7,3 +7,4 @@ Integrantes:
 - Rojas Torres, Davis Jefferson
 - Sandoval Gamboa, Ximena Solange
 - Miranda Lazarte , Jesus Alexander
+- Villarreal Carhuas, Walter said

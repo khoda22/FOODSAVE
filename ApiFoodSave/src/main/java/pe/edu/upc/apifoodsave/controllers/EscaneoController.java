@@ -15,6 +15,7 @@ import pe.edu.upc.apifoodsave.repositories.IProductoRepository;
 import pe.edu.upc.apifoodsave.repositories.IUsuarioRepository;
 import pe.edu.upc.apifoodsave.servicesinterfaces.IEscaneoService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,5 +102,17 @@ public class EscaneoController {
             }
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/ultimos")
+    public ResponseEntity<?> obtenerEscaneosUltimosDias(@RequestParam(defaultValue = "7") int dias) {
+        LocalDate fechaInicio = LocalDate.now().minusDays(dias);
+        List<Escaneo> lista = escaneoRepository.findEscaneosUltimosDias(fechaInicio);
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.ok("No se encontraron escaneos en los últimos " + dias + " días.");
+        }
+
+        return ResponseEntity.ok(lista);
     }
 }
