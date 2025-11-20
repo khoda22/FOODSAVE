@@ -44,7 +44,7 @@ public class NotificacionController {
      */
 
     @GetMapping("/listas")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<NotificacionListDTO> listar() {
         return service.list().stream().map(n -> {
             NotificacionListDTO dto = new NotificacionListDTO();
@@ -58,7 +58,7 @@ public class NotificacionController {
 
     // ============ NUEVO: AUTOGENERAR/ACTUALIZAR POR INVENTARIO ============
     @PostMapping("/auto/{inventarioId}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> autogenerar(@PathVariable int inventarioId) {
         Inventario inv = inventarioRepository.findById(inventarioId).orElse(null);
         if (inv == null || inv.getFechavencimientoInventario() == null) {

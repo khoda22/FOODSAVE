@@ -22,7 +22,7 @@ public class ProductoController {
     private IProductoService service;
 
     @GetMapping("/listas")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<ProductoDTOList> listar(){
         return service.list().stream().map(a->{
             ModelMapper m=new ModelMapper();
@@ -30,7 +30,7 @@ public class ProductoController {
         }).collect(Collectors.toList());
     }
     @PostMapping("/nuevos")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> insertar(@RequestBody ProductoDTOInsert dto) {
         ModelMapper mapper = new ModelMapper();
         Producto producto = mapper.map(dto, Producto.class);
@@ -39,7 +39,7 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Producto prov = service.listId(id);
         if (prov == null) {
@@ -53,7 +53,7 @@ public class ProductoController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") Integer id) {
         Producto p = service.listId(id);
         if (p == null) {
@@ -64,7 +64,7 @@ public class ProductoController {
         return ResponseEntity.ok("Registro con ID " + id + " eliminado correctamente.");
     }
     @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> modificar(@RequestBody ProductoDTOUpdate dto) {
         ModelMapper m = new ModelMapper();
         Producto p = m.map(dto, Producto.class);

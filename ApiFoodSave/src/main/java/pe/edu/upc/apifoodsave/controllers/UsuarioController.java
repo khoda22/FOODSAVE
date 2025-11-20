@@ -29,7 +29,7 @@ public class UsuarioController {
     private PasswordEncoder passwordEncoder;
   
     @GetMapping("/lista")
-    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+    //@PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public List<UsuarioListDTO> Listar() {
         return uS.listar().stream().map( x->{
             ModelMapper m = new ModelMapper();
@@ -38,7 +38,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/listarsinpassword")
-    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+    //@PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public List<UsernameSinPasswordDTO> ListarUsernameSinPassword()
     {
         List<String[]> lista = uS.ListarUsernameSinPassword();
@@ -88,7 +88,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public UsuarioListDTO Listarporid(@PathVariable("id") int id){
         ModelMapper m = new ModelMapper();
         UsuarioListDTO dto = m.map(uS.listarporid(id),UsuarioListDTO.class);
@@ -96,7 +96,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/actualizar")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public ResponseEntity<String> modificar(@RequestBody UsuarioUpdateDTO dto) {
 
         Usuario existente = uS.listarporid(dto.getIdUsuario());
@@ -128,7 +128,7 @@ public class UsuarioController {
 
 
     @DeleteMapping( "/borrar/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public void Eliminar(@PathVariable("id") int id){
         uS.Eliminar(id);
     }

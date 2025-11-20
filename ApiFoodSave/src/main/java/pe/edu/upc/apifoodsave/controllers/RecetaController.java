@@ -22,7 +22,7 @@ public class RecetaController {
     private IRecetaService service;
 
     @PostMapping("/nuevos")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public void insertar(@RequestBody RecetaDTOInsert dto) {
         ModelMapper m = new ModelMapper();
         Receta r = m.map(dto, Receta.class);
@@ -30,7 +30,7 @@ public class RecetaController {
     }
 
     @GetMapping("/listas")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<RecetaDTOList> listar() {
         return service.list().stream().map(r -> {
             RecetaDTOList dto = new RecetaDTOList();
@@ -43,7 +43,7 @@ public class RecetaController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> listarId(@PathVariable("id") Integer id) {
         Receta r = service.listId(id);
         if (r == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe receta " + id);
@@ -53,7 +53,7 @@ public class RecetaController {
     }
 
     @PutMapping("/editar")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> editar(@RequestBody RecetaDTOUpdate dto) {
         ModelMapper m = new ModelMapper();
         Receta r = m.map(dto, Receta.class);
@@ -66,7 +66,7 @@ public class RecetaController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> eliminar(@PathVariable("id") int id) {
         Receta r = service.listId(id);
         if (r == null) {

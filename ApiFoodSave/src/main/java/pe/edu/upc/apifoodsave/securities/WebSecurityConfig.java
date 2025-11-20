@@ -68,6 +68,52 @@ public class WebSecurityConfig {
                         .requestMatchers("/webjars/**").permitAll()
 
                         .requestMatchers("usuario/registrar").permitAll()
+
+                        //permisos temporales
+
+                        //NOTIFICACIONES
+                        .requestMatchers("/notificaciones").permitAll()
+                        .requestMatchers("/notificaciones/listas").permitAll()
+                        .requestMatchers("/notificaciones/auto/").permitAll()
+                        //CALIFICACION RECETA
+                        .requestMatchers("/calificaciones").permitAll()
+                        .requestMatchers("/calificaciones/nuevos").permitAll()
+                        .requestMatchers("/calificaciones/listas").permitAll()
+                        .requestMatchers("/calificaciones/recetas/{idReceta}/rating").permitAll()
+                        //INGREDIENTE RECETA
+                        .requestMatchers("/ingredientes").permitAll()
+                        .requestMatchers("/ingredientes/listas").permitAll()
+                        .requestMatchers("/ingredientes/nuevos").permitAll()
+
+                        //INVENTARIO
+                        .requestMatchers("/inventario").permitAll()
+                        .requestMatchers("/inventario/listas").permitAll()
+                        .requestMatchers("/inventario/nuevos").permitAll()
+                        .requestMatchers("/inventario/{id}").permitAll()
+                        //HISTORIAL ESCANEO
+                        .requestMatchers("/escaneos").permitAll()
+                        .requestMatchers("/escaneos/nuevos").permitAll()
+                        .requestMatchers("/escaneos/listas").permitAll()
+                        //RECETAS
+                        .requestMatchers("/recetas").permitAll()
+                        .requestMatchers("/recetas/listas").permitAll()
+                        .requestMatchers("/recetas/nuevos").permitAll()
+                        .requestMatchers("/recetas/editar").permitAll()
+
+                        //USUARIO
+                        .requestMatchers("/usuario").permitAll()
+                        .requestMatchers("/usuario/lista").permitAll()
+                        .requestMatchers("/usuario/actualizar").permitAll()
+                        .requestMatchers("/usuario/borrar/{id}").permitAll()
+                        //ROL
+                        .requestMatchers("/rol/{id}").permitAll()
+                        .requestMatchers("/rol").permitAll()
+                        //PRODUCTO
+                        .requestMatchers("/producto").permitAll()
+                        .requestMatchers("/producto/listas").permitAll()
+                        .requestMatchers("/producto/nuevos").permitAll()
+                        .requestMatchers("/producto/edit").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

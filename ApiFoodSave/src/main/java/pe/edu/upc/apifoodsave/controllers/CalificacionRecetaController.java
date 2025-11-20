@@ -35,7 +35,7 @@ public class CalificacionRecetaController {
     private ICalificacionRecetaRepository calificacionRepo;
 
     @PostMapping("/nuevos")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<?> insertar(@RequestBody CalificacionRecetaDTOInsert dto) {
 
         if (dto.getCalificacion() == null || dto.getCalificacion() < 1 || dto.getCalificacion() > 5) {
@@ -67,7 +67,7 @@ public class CalificacionRecetaController {
     }
 
     @GetMapping("/listas")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public List<CalificacionRecetaDTOList> listar() {
         return service.list().stream().map(c -> {
             CalificacionRecetaDTOList dto = new CalificacionRecetaDTOList();

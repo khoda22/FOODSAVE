@@ -19,7 +19,7 @@ public class RolController {
     @Autowired
     private IRolService rS;
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+    //@PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public List<RolDTO> Listar() {
         return rS.listar().stream().map( x->{
             ModelMapper m = new ModelMapper();
@@ -28,7 +28,7 @@ public class RolController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMINISTRADOR')") // <-- usa hasRole si tus authorities tienen prefijo ROLE_
+    //@PreAuthorize("hasAuthority('ADMINISTRADOR')") // <-- usa hasRole si tus authorities tienen prefijo ROLE_
     public ResponseEntity<String> Registrar(@RequestBody RolDTO dto){
         ModelMapper m = new ModelMapper();
         Rol r = m.map(dto, Rol.class);
@@ -41,7 +41,7 @@ public class RolController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+    //@PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public RolDTO Listarporid(@PathVariable("id") int id){
         ModelMapper m = new ModelMapper();
         RolDTO dto = m.map(rS.listarporid(id),RolDTO.class);
@@ -49,7 +49,7 @@ public class RolController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+    //@PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public ResponseEntity<String> modificar(@RequestBody RolDTO dto) {
         ModelMapper m = new ModelMapper();
         Rol r = m.map(dto, Rol.class);
@@ -63,7 +63,7 @@ public class RolController {
     }
 
     @DeleteMapping( "/{id}")
-    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+    //@PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public void Eliminar(@PathVariable("id") int id){
         rS.Eliminar(id);
     }

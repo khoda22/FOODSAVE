@@ -26,7 +26,7 @@ public class EscaneoController {
     @Autowired private IProductoRepository productoRepository;
 
     @PostMapping("/nuevos")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR','CLIENTE')")
     public ResponseEntity<String> insertar(@RequestBody EscaneoInsertDTO dto) {
         // 1) validar origen
         String origen = dto.getOrigen() != null ? dto.getOrigen().toUpperCase() : "";
@@ -88,7 +88,7 @@ public class EscaneoController {
     }
 
     @GetMapping("/listas")
-    @PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
+    //@PreAuthorize("hasAnyAuthority('ADMINISTRADOR','PROGRAMADOR')")
     public List<EscaneoListDTO> listar() {
         return service.list().stream().map(e -> {
             EscaneoListDTO dto = new EscaneoListDTO();
